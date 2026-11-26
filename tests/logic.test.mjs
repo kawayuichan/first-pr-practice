@@ -6,7 +6,7 @@ import path from 'node:path';
 import { describe, test } from 'node:test';
 import { makeStep, verifyStep } from '../app/lib/calc.js';
 import { fmt, parseAmount, yen } from '../app/lib/format.js';
-import { gradeJournal, gradeNumeric } from '../app/lib/grading.js';
+import { entryNet, gradeJournal, gradeMulti, gradeNumeric, gradeSlips, slipsNet } from '../app/lib/grading.js';
 import { renderMarkdown } from '../app/lib/markdown.js';
 import { addDays, applyAnswer, dueQids, nextDue } from '../app/lib/srs.js';
 import { topicStats, validateProgress } from '../app/lib/store.js';
@@ -97,6 +97,57 @@ describe('仕訳の採点', () => {
     assert.equal(gradeNumeric(qn, '850,000').correct, true);
     assert.equal(gradeNumeric(qn, '150000').mistake, qn.mistakes[0]);
   });
+});
+
+describe('伝票の採点', () => {
+  const q = {
+    type: 'slips',
+    answer: [
+      { kind: 'in', account: '売上', amount: 30000 },
+      { kind: 'transfer', debit: { account: '売掛金', amount: 70000 }, credit: { account: '売上', amount: 70000 } },
+    ],
+    mistakes: [{ slips: [{ kind: 'in', account: '現金', amount: 30000 }], why: 'x' }],
+  };
+  test('伝票の順番が違っても正解、金額は全角でもよい', () => {
+    const r = gradeSlips(
+      q,
+      [
+        { kind: 'transfer', debit: { account: '売掛金', amount: '７０，０００' }, credit: { account: '売上', amount: '70000' } },
+        { kind: 'in', account: '売上', amount: '30,000' },
+      ],
+      accountIndex,
+    );
+    assert.equal(r.correct, true);
+  });
+  test('伝票の種類が違うと不正解', () => {
+    const r = gradeSlips(q, [{ kind: 'out', account: '売上', amount: '30000' }, q.answer[1]], accountIndex);
+    assert.equal(r.correct, false);
+  });
+  test('足りない伝票があると不正解', () => {
+    assert.equal(gradeSlips(q, [q.answer[0]], accountIndex).correct, false);
+  });
+  test('振替伝票の左右の金額が違うと注意を出す', () => {
+    const r = gradeSlips(q, [{ kind: 'transfer', debit: { account: '売掛金', amount: '70000' }, credit: { account: '売上', amount: '60000' } }], accountIndex);
+    assert.ok(r.issues.some((x) => x.includes('振替伝票')));
+  });
+  test('よくある誤答を見分ける', () => {
+    assert.equal(gradeSlips(q, q.mistakes[0].slips, accountIndex).mistake, q.mistakes[0]);
+  });
+  test('伝票の束と仕訳の増減が一致する', () => {
+    const entry = { debit: [{ account: '現金', amount: 30000 }, { account: '売掛金', amount: 70000 }], credit: [{ account: '売上', amount: 100000 }] };
+    assert.deepEqual(Object.fromEntries(slipsNet(q.answer)), Object.fromEntries(entryNet(entry)));
+  });
+});
+
+describe('複数選択の採点', () => {
+  const q = { type: 'multi', answer: [1, 3, 5], mistakes: [{ options: [1, 5], why: 'x' }] };
+  test('選ぶ順番は問わない', () => assert.equal(gradeMulti(q, [5, 1, 3]).correct, true));
+  test('足りない・多いは不正解', () => {
+    assert.equal(gradeMulti(q, [1, 3]).correct, false);
+    assert.equal(gradeMulti(q, [1, 3, 5, 6]).correct, false);
+  });
+  test('よくある誤答を見分ける', () => assert.equal(gradeMulti(q, [5, 1]).mistake, q.mistakes[0]));
+  test('何も選んでいないと注意を出す', () => assert.ok(gradeMulti(q, []).issues.length));
 });
 
 describe('復習スケジュール(間違えた日から1日後・3日後・7日後)', () => {
