@@ -1,0 +1,15 @@
+{
+  "name": "boki2-study",
+  "private": true,
+  "description": "日商簿記2級(2027年4月以降の新範囲)の自分専用 参考書+問題集 Webアプリ",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs --check",
+    "test": "node scripts/build.mjs --check && node --test \"tests/*.test.mjs\"",
+    "serve": "python3 -m http.server 8000"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
