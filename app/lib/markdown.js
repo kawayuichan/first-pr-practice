@@ -97,12 +97,19 @@ function parseTable(lines, start, opts) {
   let i = start + 2;
   const rows = [];
   while (i < lines.length && /^\|/.test(lines[i])) rows.push(splitRow(lines[i++]));
+  const joined = head.join('|');
   const cls =
-    head.join('|') === '借方科目|金額|貸方科目|金額'
+    joined === '借方科目|金額|貸方科目|金額'
       ? 'md-journal'
-      : head.join('|') === '借方|貸方'
+      : joined === '借方|貸方'
         ? 'md-taccount'
-        : 'md-table';
+        : head[0].startsWith('入金伝票')
+          ? 'md-slip slip-in'
+          : head[0].startsWith('出金伝票')
+            ? 'md-slip slip-out'
+            : head[0].startsWith('振替伝票')
+              ? 'md-slip slip-transfer'
+              : 'md-table';
   const cell = (tag, text, k) =>
     `<${tag}${aligns[k] ? ` class="al-${aligns[k]}"` : ''}>${renderInline(text ?? '', opts)}</${tag}>`;
   const thead = `<tr>${head.map((h, k) => cell('th', h, k)).join('')}</tr>`;

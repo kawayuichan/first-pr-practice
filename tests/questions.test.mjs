@@ -8,7 +8,7 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 import { verifyStep } from '../app/lib/calc.js';
-import { gradeQuestion } from '../app/lib/grading.js';
+import { entryNet, gradeQuestion, slipsNet } from '../app/lib/grading.js';
 import {
   accountIndex,
   allStrings,
@@ -26,6 +26,10 @@ const files = questionFiles();
 const formats = scopeFormats();
 const sum = (ls) => ls.reduce((s, l) => s + l.amount, 0);
 const isPosInt = (n) => Number.isSafeInteger(n) && n > 0;
+const slipAmounts = (slips) => slips.flatMap((s) => (s.kind === 'transfer' ? [s.debit.amount, s.credit.amount] : [s.amount]));
+const slipAccounts = (slips) => slips.flatMap((s) => (s.kind === 'transfer' ? [s.debit.account, s.credit.account] : [s.account]));
+const entryLines = (e) => [...e.debit, ...e.credit];
+const mapToObj = (m) => Object.fromEntries([...m].sort((a, b) => (a[0] < b[0] ? -1 : 1)));
 
 test('問題データが1つ以上ある', () => assert.ok(files.length > 0));
 
@@ -51,7 +55,7 @@ for (const { file, data } of files) {
           assert.ok(topicIds.has(q.topic), '論点IDが範囲外');
           assert.ok(formats.has(q.format), `format ${q.format} は scope.md にない`);
           assert.ok([1, 2, 3].includes(q.difficulty), '難易度は1〜3');
-          assert.ok(['journal', 'choice', 'numeric'].includes(q.type));
+          assert.ok(['journal', 'choice', 'numeric', 'slips', 'multi'].includes(q.type), `未知の type ${q.type}`);
           for (const k of ['prompt', 'explanation']) assert.ok(typeof q[k] === 'string' && q[k].trim(), `${k} が空`);
           assert.ok(Array.isArray(q.mistakes) && q.mistakes.length >= 1, 'よくある誤答が必要');
           for (const m of q.mistakes) assert.ok(typeof m.why === 'string' && m.why.trim(), '誤答の理由が空');
@@ -77,12 +81,21 @@ for (const { file, data } of files) {
           }
         });
 
+        if (/^[CK]/.test(q.topic)) {
+          test('2級の論点: 支払家賃・支払地代をどこにも使わない(支払リース料に統一)', () => {
+            const text = allStrings({ ...q, ref: null }).join('\n');
+            for (const a of rules.grade2_banned_accounts.accounts) assert.ok(!text.includes(a), a);
+          });
+        }
+
         test('解説・誤答の理由に出てくる金額は、問題文か計算ステップの数字だけ', () => {
           const allowed = new Set([
             ...moneyNumbers(q.prompt),
             ...moneyNumbers((q.options ?? []).join('\n')),
             ...steps.flatMap((s) => [s.value, ...s.args]),
             ...(q.type === 'journal' ? [...q.answer.debit, ...q.answer.credit].map((l) => l.amount) : []),
+            ...(q.type === 'slips' ? [...slipAmounts(q.answer), ...entryLines(q.entry).map((l) => l.amount)] : []),
+            ...q.mistakes.flatMap((m) => (m.slips ? slipAmounts(m.slips) : m.entry ? entryLines(m.entry).map((l) => l.amount) : [])),
             ...(q.type === 'numeric' ? [q.answer] : []),
             ...q.mistakes.map((m) => m.value).filter((v) => v !== undefined),
           ]);
@@ -125,7 +138,7 @@ for (const { file, data } of files) {
 
           if (/^[CK]/.test(q.topic)) {
             test('2級の論点では支払家賃・支払地代を使わない(支払リース料)', () => {
-              const used = [...q.choices, ...q.mistakes.flatMap((m) => [...m.entry.debit, ...m.entry.credit].map((l) => l.account))];
+              const used = [...q.choices, ...q.mistakes.flatMap((m) => entryLines(m.entry).map((l) => l.account))];
               for (const a of rules.grade2_banned_accounts.accounts) assert.ok(!used.includes(a), a);
             });
           }
@@ -154,6 +167,68 @@ for (const { file, data } of files) {
             assert.deepEqual(q.mistakes.map((m) => m.option).sort(), wrong.sort());
             assert.equal(gradeQuestion(q, q.answer, accountIndex).correct, true);
             for (const m of q.mistakes) assert.equal(gradeQuestion(q, m.option, accountIndex).mistake, m);
+          });
+        }
+
+        if (q.type === 'slips') {
+          test('伝票: 種類と金額が正しく、振替伝票は左右同額、現金は入金・出金伝票でだけ扱う', () => {
+            assert.ok(Array.isArray(q.answer) && q.answer.length >= 1);
+            for (const s of q.answer) {
+              assert.ok(['in', 'out', 'transfer'].includes(s.kind), `伝票の種類 ${s.kind}`);
+              if (s.kind === 'transfer') assert.equal(s.debit.amount, s.credit.amount, '振替伝票の左右の金額が違う');
+            }
+            for (const a of slipAccounts(q.answer)) assert.notEqual(a, '現金', '伝票の科目欄に現金は書かない');
+            for (const n of slipAmounts(q.answer)) assert.ok(isPosInt(n));
+          });
+
+          test('伝票: 伝票をすべて合わせた結果が、取引の仕訳と一致する', () => {
+            assert.equal(sum(q.entry.debit), sum(q.entry.credit), '取引の仕訳の貸借が一致しない');
+            assert.deepEqual(mapToObj(slipsNet(q.answer)), mapToObj(entryNet(q.entry)));
+          });
+
+          test('伝票: 金額は問題文か計算ステップの数字、科目は公式表と選択肢にある', () => {
+            const given = new Set([...moneyNumbers(q.prompt), ...(q.calc ?? []).map((s) => s.value)]);
+            for (const n of [...slipAmounts(q.answer), ...entryLines(q.entry).map((l) => l.amount)]) {
+              assert.ok(given.has(n), `金額 ${n} の根拠がない`);
+            }
+            assert.ok(q.choices.length >= 4 && q.choices.length <= 8, '選択肢は4〜8個');
+            assert.equal(new Set(q.choices).size, q.choices.length);
+            for (const c of q.choices) assert.ok(accountIndex.names.has(c), `「${c}」は勘定科目表にない`);
+            for (const a of slipAccounts(q.answer)) assert.ok(q.choices.includes(a), `「${a}」が選択肢にない`);
+            for (const l of entryLines(q.entry)) assert.ok(accountIndex.names.has(l.account), `「${l.account}」は勘定科目表にない`);
+          });
+
+          test('伝票の採点: 正解は正解、誤答は不正解で、その誤答として判定される', () => {
+            assert.equal(gradeQuestion(q, q.answer, accountIndex).correct, true);
+            const reversed = [...q.answer].reverse();
+            assert.equal(gradeQuestion(q, reversed, accountIndex).correct, true, '伝票の順番を変えても正解');
+            for (const m of q.mistakes) {
+              assert.ok(m.slips, '伝票問題の誤答には slips が必要');
+              for (const a of slipAccounts(m.slips)) assert.ok(q.choices.includes(a), `誤答の科目「${a}」が選択肢にない`);
+              for (const n of slipAmounts(m.slips)) assert.ok(isPosInt(n));
+              const r = gradeQuestion(q, m.slips, accountIndex);
+              assert.equal(r.correct, false, `誤答が正解扱い: ${m.why}`);
+              assert.equal(r.mistake, m, `誤答として判定されない: ${m.why}`);
+            }
+          });
+        }
+
+        if (q.type === 'multi') {
+          test('複数選択: 正解は選択肢の範囲内で重複なし、誤答は正解と違う組み合わせ', () => {
+            assert.ok(q.options.length >= 3);
+            assert.equal(new Set(q.options).size, q.options.length);
+            assert.ok(q.answer.length >= 1);
+            assert.deepEqual(q.answer, [...new Set(q.answer)].sort((a, b) => a - b));
+            for (const k of q.answer) assert.ok(Number.isInteger(k) && k >= 0 && k < q.options.length);
+            const key = (xs) => [...xs].sort((a, b) => a - b).join(',');
+            const keys = q.mistakes.map((m) => key(m.options));
+            assert.equal(new Set(keys).size, keys.length, '誤答の組み合わせが重複');
+            for (const m of q.mistakes) {
+              assert.notEqual(key(m.options), key(q.answer));
+              for (const k of m.options) assert.ok(Number.isInteger(k) && k >= 0 && k < q.options.length);
+              assert.equal(gradeQuestion(q, m.options, accountIndex).mistake, m);
+            }
+            assert.equal(gradeQuestion(q, [...q.answer].reverse(), accountIndex).correct, true);
           });
         }
 

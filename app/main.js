@@ -3,7 +3,7 @@
 
 import { OPS } from './lib/calc.js';
 import { fmt, parseAmount, yen } from './lib/format.js';
-import { buildAccountIndex, gradeQuestion } from './lib/grading.js';
+import { buildAccountIndex, gradeQuestion, SLIP_KINDS } from './lib/grading.js';
 import { escapeHtml as esc, renderInline, renderMarkdown } from './lib/markdown.js';
 import { applyAnswer, dueQids, INTERVALS, nextDue, todayStr } from './lib/srs.js';
 import {
@@ -17,6 +17,7 @@ import {
 
 const $app = document.getElementById('app');
 const MAX_ROWS = 6;
+const MAX_SLIPS = 4;
 
 const S = {
   manifest: null,
@@ -312,7 +313,96 @@ function numericForm(q) {
   return `<label class="numin"><input id="num" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="done" placeholder="答え" aria-label="答え"><span>${esc(q.unit)}</span></label>`;
 }
 
+function multiForm(q) {
+  return `<div class="choices">${q.options
+    .map(
+      (o, k) =>
+        `<label class="opt" data-k="${k}"><input type="checkbox" name="opt" value="${k}"><span>${renderInline(o)}</span></label>`,
+    )
+    .join('')}</div>
+    <p class="muted small">当てはまるものを、すべて選びます。</p>`;
+}
+
+function slipCardHtml(kind, choices) {
+  const title = SLIP_KINDS[kind];
+  const opts = `<option value="">科目を選ぶ</option>${choices.map((c) => `<option>${esc(c)}</option>`).join('')}`;
+  const row = (label, accCls, amtCls) => `
+    <div class="slip-row">
+      <span class="slip-side">${label}</span>
+      <select class="${accCls}" aria-label="${title}の${label}の科目">${opts}</select>
+      <input class="amt ${amtCls}" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="done" placeholder="金額" aria-label="${title}の${label}の金額">
+    </div>`;
+  const body = kind === 'transfer' ? row('借方', 's-dacc', 's-damt') + row('貸方', 's-cacc', 's-camt') : row('科目', 's-acc', 's-amt');
+  return `<div class="slip slip-${kind}" data-kind="${kind}">
+    <div class="slip-head"><span>${title}</span><button type="button" class="slip-del" aria-label="${title}を削除">削除</button></div>
+    ${body}
+  </div>`;
+}
+
+function slipsForm() {
+  const add = (kind) => `<button type="button" class="add-slip slip-${kind}" data-kind="${kind}">+ ${SLIP_KINDS[kind]}</button>`;
+  return `<div class="slip-add" role="group" aria-label="伝票を追加">${add('in')}${add('out')}${add('transfer')}</div>
+    <div class="slips" id="slips"></div>
+    <p class="muted small">必要な伝票を追加して記入します(最大${MAX_SLIPS}枚)。入金伝票・出金伝票の科目欄には相手の科目を書きます。</p>`;
+}
+
+function wireSlips(q) {
+  const box = $app.querySelector('#slips');
+  const update = () => {
+    const full = box.querySelectorAll('.slip').length >= MAX_SLIPS;
+    $app.querySelectorAll('.add-slip').forEach((b) => (b.disabled = full));
+  };
+  $app.querySelectorAll('.add-slip').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (box.querySelectorAll('.slip').length >= MAX_SLIPS) return;
+      box.insertAdjacentHTML('beforeend', slipCardHtml(b.dataset.kind, q.choices));
+      box.lastElementChild.querySelector('select').focus();
+      update();
+    }),
+  );
+  box.addEventListener('click', (ev) => {
+    const del = ev.target.closest('.slip-del');
+    if (!del || del.disabled) return;
+    del.closest('.slip').remove();
+    update();
+  });
+}
+
+function collectSlips() {
+  return [...$app.querySelectorAll('#slips .slip')].map((el) => {
+    const v = (cls) => el.querySelector(`.${cls}`)?.value ?? '';
+    const kind = el.dataset.kind;
+    if (kind === 'transfer') {
+      return { kind, debit: { account: v('s-dacc'), amount: v('s-damt') }, credit: { account: v('s-cacc'), amount: v('s-camt') } };
+    }
+    return { kind, account: v('s-acc'), amount: v('s-amt') };
+  });
+}
+
+function slipView(s, mark) {
+  const mk = mark === undefined ? '' : mark ? '<span class="mk ok">✓</span>' : '<span class="mk ng">×</span>';
+  const line = (label, acc, amt) =>
+    `<tr><th>${label}</th><td>${esc(acc)}</td><td class="al-right">${fmt(amt)}</td></tr>`;
+  const rows =
+    s.kind === 'transfer'
+      ? line('借方', s.debit.account, s.debit.amount) + line('貸方', s.credit.account, s.credit.amount)
+      : line('科目', s.account, s.amount);
+  return `<div class="slip-view slip-${s.kind}"><div class="slip-head">${mk}${SLIP_KINDS[s.kind]}</div><table>${rows}</table></div>`;
+}
+
+function slipsInline(slips) {
+  return slips
+    .map((s) =>
+      s.kind === 'transfer'
+        ? `${SLIP_KINDS[s.kind]}(${esc(s.debit.account)} ${fmt(s.debit.amount)} / ${esc(s.credit.account)} ${fmt(s.credit.amount)})`
+        : `${SLIP_KINDS[s.kind]}(${esc(s.account)} ${fmt(s.amount)})`,
+    )
+    .join('、');
+}
+
 function collectAnswer(q) {
+  if (q.type === 'slips') return collectSlips();
+  if (q.type === 'multi') return [...$app.querySelectorAll('input[name="opt"]:checked')].map((el) => Number(el.value));
   if (q.type === 'journal') {
     const out = { debit: [], credit: [] };
     for (const side of ['debit', 'credit']) {
@@ -331,6 +421,11 @@ function collectAnswer(q) {
 
 function isEmptyAnswer(q, a) {
   if (q.type === 'journal') return [...a.debit, ...a.credit].every((l) => !l.account && !String(l.amount).trim());
+  if (q.type === 'slips') {
+    const vals = a.flatMap((s) => (s.kind === 'transfer' ? [s.debit.account, s.debit.amount, s.credit.account, s.credit.amount] : [s.account, s.amount]));
+    return vals.every((x) => !String(x).trim());
+  }
+  if (q.type === 'multi') return a.length === 0;
   if (q.type === 'choice') return a == null;
   return parseAmount(a) == null;
 }
@@ -340,7 +435,8 @@ function renderQuestion() {
   const q = S.questions.get(s.ids[s.i]);
   const t = S.topics.get(q.topic);
   const progress = Math.round((s.i / s.ids.length) * 100);
-  const form = q.type === 'journal' ? journalForm(q) : q.type === 'choice' ? choiceForm(q) : numericForm(q);
+  const forms = { journal: journalForm, choice: choiceForm, numeric: numericForm, slips: slipsForm, multi: multiForm };
+  const form = forms[q.type](q);
   page({
     title: s.title,
     back: s.back,
@@ -371,6 +467,7 @@ function renderQuestion() {
       if (n + 1 >= MAX_ROWS) b.disabled = true;
     }),
   );
+  if (q.type === 'slips') wireSlips(q);
   $app.querySelector('#submit').addEventListener('click', () => submit(q));
 }
 
@@ -385,19 +482,36 @@ async function submit(q) {
   const answer = collectAnswer(q);
   const msg = $app.querySelector('#form-msg');
   if (isEmptyAnswer(q, answer)) {
-    msg.textContent = q.type === 'choice' ? '選択肢を選んでください。' : '解答を入力してください。';
+    msg.textContent =
+      q.type === 'choice' || q.type === 'multi'
+        ? '選択肢を選んでください。'
+        : q.type === 'slips'
+          ? '伝票を追加して記入してください。'
+          : '解答を入力してください。';
     return;
   }
   msg.textContent = '';
   const res = gradeQuestion(q, answer, S.index);
   record(q, res.correct);
-  $app.querySelectorAll('.qcard select, .qcard input, .qcard .addrow').forEach((el) => (el.disabled = true));
+  $app
+    .querySelectorAll('.qcard select, .qcard input, .qcard .addrow, .qcard .add-slip, .qcard .slip-del')
+    .forEach((el) => (el.disabled = true));
   $app.querySelector('#submit').remove();
   if (q.type === 'choice') {
     $app.querySelectorAll('.opt').forEach((el) => {
       const k = Number(el.dataset.k);
       if (k === q.answer) el.classList.add('is-answer');
       else if (k === answer) el.classList.add('is-wrong');
+    });
+  }
+  if (q.type === 'multi') {
+    const sel = new Set(answer);
+    const ans = new Set(q.answer);
+    $app.querySelectorAll('.opt').forEach((el) => {
+      const k = Number(el.dataset.k);
+      if (ans.has(k) && sel.has(k)) el.classList.add('is-answer');
+      else if (ans.has(k)) el.classList.add('is-missed');
+      else if (sel.has(k)) el.classList.add('is-wrong');
     });
   }
   const box = $app.querySelector('#result');
@@ -440,6 +554,18 @@ async function resultHtml(q, res, answer) {
     );
   } else if (!res.correct && q.type === 'choice') {
     parts.push(`<p>正解: <strong>${renderInline(q.options[q.answer])}</strong></p>`);
+  } else if (q.type === 'multi') {
+    parts.push(
+      `<p>正解: <strong>${q.answer.map((k) => renderInline(q.options[k])).join('・')}</strong></p>${
+        res.correct ? '' : '<p class="muted small">緑 = 正しく選べた、オレンジ = 選び忘れ、赤 = 選ばなくてよいもの</p>'
+      }`,
+    );
+  } else if (q.type === 'slips') {
+    if (!res.correct && res.slips.length) {
+      parts.push(`<h3>あなたの伝票</h3><div class="slip-list">${res.marks.map((m) => slipView(m, m.ok)).join('')}</div>`);
+    }
+    parts.push(`<h3>正解の伝票</h3><div class="slip-list">${q.answer.map((s) => slipView(s)).join('')}</div>`);
+    parts.push(`<h3>この取引の仕訳</h3>${entryTable(q.entry)}`);
   }
 
   parts.push(`<div class="explain"><h3>解説</h3>${renderMarkdown(q.explanation).html}</div>`);
@@ -451,11 +577,15 @@ async function resultHtml(q, res, answer) {
       const what =
         m.entry !== undefined
           ? entryInline(m.entry)
-          : m.option !== undefined
-            ? renderInline(q.options[m.option])
-            : m.value !== undefined
-              ? yen(m.value)
-              : '';
+          : m.slips !== undefined
+            ? slipsInline(m.slips)
+            : m.options !== undefined
+              ? m.options.map((k) => renderInline(q.options[k])).join('・')
+              : m.option !== undefined
+                ? renderInline(q.options[m.option])
+                : m.value !== undefined
+                  ? yen(m.value)
+                  : '';
       return `<li><div class="m-what">${what}</div><div class="m-why">${renderInline(m.why)}</div></li>`;
     };
     parts.push(

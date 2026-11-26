@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "4fc7c535ff99",
+  "version": "4d01f627b8cc",
   "topics": [
     {
       "id": "B01",
@@ -15,9 +15,9 @@
       "id": "B02",
       "phase": 0,
       "name": "帳簿と伝票",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/B02.md",
+      "questions": "data/questions/B02.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -531,6 +531,8 @@
   ],
   "files": [
     "data/questions/B01.json",
-    "textbook/B01.md"
+    "data/questions/B02.json",
+    "textbook/B01.md",
+    "textbook/B02.md"
   ]
 }
