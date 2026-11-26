@@ -19,6 +19,7 @@ GitHub リモートは `kawayuichan/first-pr-practice`。
 
 コマンド: `npm run build`(生成)、`npm test`(生成物が最新か+全テスト)、`npm run serve`(http://localhost:8000/ で確認)。
 アプリのファイルを変えたら `npm run build` で `data/manifest.json` を更新する(オフライン用キャッシュの一覧と版が変わるため)。
+日本語フォント: `app/fonts/` は Noto Sans JP(OFL)を使う文字だけにしたもの(本文 Medium 500、太字 Bold 700)。中国語の字形で表示されないよう、必ずこのフォントを使う。新しい論点で漢字が増えてテストが失敗したら `npm run fonts`(Python と `pip install fonttools brotli` が必要)→ `npm run build`。
 
 進め方は「論点リスト確認 → 見本1論点(参考書1章+問題10問+アプリ最小版)を確認 → 残りを1論点ずつ追加 → 最後に模試モードと弱点分析」。
 各段階でユーザーの確認を待ってから次に進む。
