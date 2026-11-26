@@ -12,6 +12,13 @@ GitHub リモートは `kawayuichan/first-pr-practice`。
 - `docs/scope.md` … 公式の出題区分表から作った論点リスト(論点IDの一覧)。**出題範囲の基準**
 - `docs/study-plan.md` … 学習順の提案
 - `data/official/accounts_2027.json` … 公式の商業簿記標準・許容勘定科目表(2027年度適用)
+- `textbook/src/<ID>.md` … 参考書の元ファイル。`{{ 式 }}` はビルド時に計算される。`textbook/<ID>.md` は自動生成
+- `scripts/questions/<ID>.mjs` … 問題の生成スクリプト(金額は `step()` で計算)。`data/questions/<ID>.json` は自動生成
+- `index.html`・`app/`・`sw.js` … アプリ本体(外部ライブラリなし、オフライン対応、GitHub Pages のルート公開)
+- `tests/` … 自動テスト(`node --test`)
+
+コマンド: `npm run build`(生成)、`npm test`(生成物が最新か+全テスト)、`npm run serve`(http://localhost:8000/ で確認)。
+アプリのファイルを変えたら `npm run build` で `data/manifest.json` を更新する(オフライン用キャッシュの一覧と版が変わるため)。
 
 進め方は「論点リスト確認 → 見本1論点(参考書1章+問題10問+アプリ最小版)を確認 → 残りを1論点ずつ追加 → 最後に模試モードと弱点分析」。
 各段階でユーザーの確認を待ってから次に進む。
