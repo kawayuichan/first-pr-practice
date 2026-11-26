@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "5f25dbd3f229",
+  "version": "4fc7c535ff99",
   "topics": [
     {
       "id": "B01",
@@ -512,6 +512,10 @@
     "manifest.webmanifest",
     "data/official/accounts_2027.json",
     "data/accounts_supplement.json",
+    "app/fonts/OFL.txt",
+    "app/fonts/boki-jp-500.woff2",
+    "app/fonts/boki-jp-700.woff2",
+    "app/fonts/charset.txt",
     "app/icons/apple-touch-icon.png",
     "app/icons/icon-192.png",
     "app/icons/icon-512.png",

@@ -50,6 +50,9 @@ npm test        # 生成物が最新か + 全問題の自動テスト
 1. `textbook/src/<論点ID>.md` に参考書を書く(計算した数字は `{{ 200,000 - 50,000 }}` のように式で書く)
 2. `scripts/questions/<論点ID>.mjs` に問題を書く(金額は `step()` で計算する)
 3. `npm run build` → `npm test` がすべて通ったらコミット
+4. テストが「フォントにない文字」と言ったら、`npm run fonts` → `npm run build` を実行する
+
+日本語フォントについて: どの端末でも日本の字体で表示するため、Noto Sans JP(SIL Open Font License 1.1)から、アプリで使う文字だけを取り出したフォントを `app/fonts/` に入れています。本文は Medium、見出し・太字は Bold。作り直す `npm run fonts` には Python 3 と `pip install fonttools brotli` が必要です(元のフォントは npm から自動で取得します)。
 
 自動テストで確かめていること: 仕訳の貸借一致、計算の検算(合計・差額)、論点IDが範囲内か、勘定科目が公式表にあるか、旧基準(手形・小切手・旧リース)や1級の用語が入っていないか、解説の金額に根拠があるか、よくある誤答が正しく見分けられるか。
 

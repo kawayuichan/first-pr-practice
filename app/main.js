@@ -133,7 +133,7 @@ function entryTable(entry, marks) {
   const cell = (side, k) => {
     const l = entry[side][k];
     if (!l) return '<td></td><td></td>';
-    const mk = marks ? (marks[side][k]?.ok ? '<span class="mk ok">✓</span>' : '<span class="mk ng">✗</span>') : '';
+    const mk = marks ? (marks[side][k]?.ok ? '<span class="mk ok">✓</span>' : '<span class="mk ng">×</span>') : '';
     return `<td>${mk}${esc(l.account)}</td><td class="al-right">${fmt(l.amount)}</td>`;
   };
   let rows = '';

@@ -62,16 +62,35 @@
   color-scheme: dark;
 }
 
+/* 日本語フォント: Noto Sans JP をアプリで使う文字だけにしたもの(npm run fonts で作る。SIL OFL 1.1、app/fonts/OFL.txt)
+   どの端末でも日本の字体で表示するため。入っていない文字は端末の日本語フォントで表示する */
+@font-face {
+  font-family: 'BokiJP';
+  src: url('fonts/boki-jp-500.woff2') format('woff2');
+  font-weight: 100 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BokiJP';
+  src: url('fonts/boki-jp-700.woff2') format('woff2');
+  font-weight: 600 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic UI', Meiryo, sans-serif;
+  font-family: 'BokiJP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Noto Sans CJK JP', 'Yu Gothic', YuGothic, Meiryo, sans-serif;
   font-size: 16px;
-  line-height: 1.7;
+  font-weight: 500;
+  line-height: 1.75;
 }
+strong, b, h1, h2, h3, h4, th, legend, summary { font-weight: 700; }
 a { color: var(--primary); }
 h2 { font-size: 1.05rem; margin: 0 0 8px; }
 h3 { font-size: 0.95rem; margin: 16px 0 6px; }
@@ -174,6 +193,7 @@ th { background: var(--surface-2); font-weight: 600; text-align: left; }
 .al-right { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .al-center { text-align: center; }
 table.md-journal th, table.md-journal td { white-space: nowrap; }
+table.md-table td:first-child, table.md-table th:first-child { white-space: nowrap; }
 table.md-journal th:nth-child(3), table.md-journal td:nth-child(3) { border-left: 2px solid var(--text); }
 table.md-taccount { max-width: 520px; }
 table.md-taccount th { text-align: center; }

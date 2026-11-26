@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
+    "fonts": "node scripts/fonts/make-fonts.mjs",
     "check": "node scripts/build.mjs --check",
     "test": "node scripts/build.mjs --check && node --test \"tests/*.test.mjs\"",
     "serve": "python3 -m http.server 8000"
