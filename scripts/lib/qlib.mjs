@@ -108,6 +108,30 @@ export function multiQ(o) {
   };
 }
 
+/** 表の空欄。answer が null の数値欄は「空欄のままが正解」 */
+export const blankNum = (answer) => ({ blank: true, kind: 'number', answer });
+export const blankSelect = (options, answer) => ({ blank: true, kind: 'select', options, answer });
+
+/**
+ * 表の穴埋め問題(出納帳・商品有高帳など)。
+ * checks: 表の中の合計・差額の関係 [{ label, op, args: [数 または [行, 列]], result: [行, 列] }]。テストで計算し直す
+ */
+export function tableQ(o) {
+  common(o);
+  if (!o.table || !o.checks?.length) throw new Error(`${o.id}: table と checks(表の中の計算)が必要です`);
+  return {
+    id: o.id,
+    topic: o.topic,
+    format: o.format ?? 'basic_check',
+    type: 'table',
+    difficulty: o.difficulty,
+    prompt: o.prompt,
+    table: o.table,
+    checks: o.checks,
+    ...tail(o),
+  };
+}
+
 /** 数値入力問題 */
 export function numericQ(o) {
   common(o);

@@ -324,3 +324,17 @@ table.md-slip.slip-in th { background: var(--slip-in-bg); }
 table.md-slip.slip-out th { background: var(--slip-out-bg); }
 table.md-slip.slip-transfer th { background: var(--slip-transfer-bg); }
 table.md-slip td { color: var(--text); }
+
+/* 表の穴埋め */
+.tb-title { font-weight: 700; text-align: center; margin: 4px 0; }
+table.fill-table th, table.fill-table td { white-space: nowrap; vertical-align: middle; }
+table.fill-table td.tb-blank { padding: 4px; min-width: 6.5em; }
+table.fill-table td.tb-blank input, table.fill-table td.tb-blank select { min-height: 40px; padding: 6px 8px; }
+table.fill-table td.cell-ok { background: var(--ok-bg); }
+table.fill-table td.cell-ng { background: var(--ng-bg); }
+.cell-ans { font-size: 0.8rem; color: var(--ng); text-align: right; padding: 2px 4px 0; }
+.mistake-hit ul { margin: 0; padding-left: 1.2em; }
+
+/* 列が多い表(5列以上): 折り返さず横スクロール */
+table.md-wide { width: auto; min-width: 100%; }
+table.md-wide th, table.md-wide td { white-space: nowrap; }

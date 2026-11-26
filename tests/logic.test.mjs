@@ -6,7 +6,18 @@ import path from 'node:path';
 import { describe, test } from 'node:test';
 import { makeStep, verifyStep } from '../app/lib/calc.js';
 import { fmt, parseAmount, yen } from '../app/lib/format.js';
-import { entryNet, gradeJournal, gradeMulti, gradeNumeric, gradeSlips, slipsNet } from '../app/lib/grading.js';
+import {
+  entryNet,
+  gradeJournal,
+  gradeMulti,
+  gradeNumeric,
+  gradeSlips,
+  gradeTable,
+  isKnownAccount,
+  slipsNet,
+  verifyTableCheck,
+} from '../app/lib/grading.js';
+import { OPS } from '../app/lib/calc.js';
 import { renderMarkdown } from '../app/lib/markdown.js';
 import { addDays, applyAnswer, dueQids, nextDue } from '../app/lib/srs.js';
 import { topicStats, validateProgress } from '../app/lib/store.js';
@@ -136,6 +147,49 @@ describe('伝票の採点', () => {
   test('伝票の束と仕訳の増減が一致する', () => {
     const entry = { debit: [{ account: '現金', amount: 30000 }, { account: '売掛金', amount: 70000 }], credit: [{ account: '売上', amount: 100000 }] };
     assert.deepEqual(Object.fromEntries(slipsNet(q.answer)), Object.fromEntries(entryNet(entry)));
+  });
+});
+
+describe('表の穴埋めの採点', () => {
+  const q = {
+    type: 'table',
+    table: {
+      columns: [{ label: '摘要' }, { label: '支払' }, { label: '通信費' }, { label: '消耗品費' }],
+      rows: [
+        ['切手', 800, { blank: true, kind: 'number', answer: 800 }, { blank: true, kind: 'number', answer: null }],
+        ['用紙', 1200, { blank: true, kind: 'number', answer: null }, { blank: true, kind: 'number', answer: 1200 }],
+        ['合計', { blank: true, kind: 'number', answer: 2000 }, 800, 1200],
+      ],
+    },
+    mistakes: [{ cell: [1, 2], value: 1200, why: 'x' }],
+  };
+  const full = { '0,2': '800', '0,3': '', '1,2': '', '1,3': '1,200', '2,1': '２，０００' };
+  test('すべて正しければ正解(空欄のままが正解の欄も含む)', () => {
+    const r = gradeTable(q, full);
+    assert.equal(r.correct, true);
+    assert.equal(r.okCount, 5);
+  });
+  test('欄ごとに採点し、よくある誤答を見分ける', () => {
+    const r = gradeTable(q, { ...full, '1,2': '1200' });
+    assert.equal(r.correct, false);
+    assert.equal(r.okCount, 4);
+    assert.deepEqual(r.mistakes, [q.mistakes[0]]);
+  });
+  test('何も書いていないと注意を出す', () => assert.ok(gradeTable(q, {}).issues.length));
+  test('表の中の合計の検算', () => {
+    const ok = { label: '支払の合計', op: 'add', args: [[0, 1], [1, 1]], result: [2, 1] };
+    assert.ok(verifyTableCheck(q.table, ok, OPS));
+    assert.ok(!verifyTableCheck(q.table, { ...ok, args: [[0, 1]] }, OPS));
+  });
+});
+
+describe('口座名・取引先名が入る勘定科目', () => {
+  test('「普通預金○○銀行」「〇〇商店」の形を認める', () => {
+    assert.ok(isKnownAccount(accountIndex, '普通預金A銀行'));
+    assert.ok(isKnownAccount(accountIndex, '当座預金B銀行'));
+    assert.ok(isKnownAccount(accountIndex, '東西商店'));
+    assert.ok(!isKnownAccount(accountIndex, 'A銀行'));
+    assert.ok(!isKnownAccount(accountIndex, '受取手形'));
   });
 });
 

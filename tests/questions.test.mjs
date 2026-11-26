@@ -7,8 +7,17 @@
 
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import { verifyStep } from '../app/lib/calc.js';
-import { entryNet, gradeQuestion, slipsNet } from '../app/lib/grading.js';
+import { OPS, verifyStep } from '../app/lib/calc.js';
+import {
+  cellKey,
+  entryNet,
+  gradeQuestion,
+  isKnownAccount,
+  slipsNet,
+  tableAnswerInput,
+  tableBlanks,
+  verifyTableCheck,
+} from '../app/lib/grading.js';
 import {
   accountIndex,
   allStrings,
@@ -29,6 +38,8 @@ const isPosInt = (n) => Number.isSafeInteger(n) && n > 0;
 const slipAmounts = (slips) => slips.flatMap((s) => (s.kind === 'transfer' ? [s.debit.amount, s.credit.amount] : [s.amount]));
 const slipAccounts = (slips) => slips.flatMap((s) => (s.kind === 'transfer' ? [s.debit.account, s.credit.account] : [s.account]));
 const entryLines = (e) => [...e.debit, ...e.credit];
+const tableNumbers = (t) =>
+  t.rows.flat().flatMap((c) => (typeof c === 'number' ? [c] : c && c.blank && typeof c.answer === 'number' ? [c.answer] : []));
 const mapToObj = (m) => Object.fromEntries([...m].sort((a, b) => (a[0] < b[0] ? -1 : 1)));
 
 test('問題データが1つ以上ある', () => assert.ok(files.length > 0));
@@ -55,7 +66,7 @@ for (const { file, data } of files) {
           assert.ok(topicIds.has(q.topic), '論点IDが範囲外');
           assert.ok(formats.has(q.format), `format ${q.format} は scope.md にない`);
           assert.ok([1, 2, 3].includes(q.difficulty), '難易度は1〜3');
-          assert.ok(['journal', 'choice', 'numeric', 'slips', 'multi'].includes(q.type), `未知の type ${q.type}`);
+          assert.ok(['journal', 'choice', 'numeric', 'slips', 'multi', 'table'].includes(q.type), `未知の type ${q.type}`);
           for (const k of ['prompt', 'explanation']) assert.ok(typeof q[k] === 'string' && q[k].trim(), `${k} が空`);
           assert.ok(Array.isArray(q.mistakes) && q.mistakes.length >= 1, 'よくある誤答が必要');
           for (const m of q.mistakes) assert.ok(typeof m.why === 'string' && m.why.trim(), '誤答の理由が空');
@@ -96,6 +107,7 @@ for (const { file, data } of files) {
             ...(q.type === 'journal' ? [...q.answer.debit, ...q.answer.credit].map((l) => l.amount) : []),
             ...(q.type === 'slips' ? [...slipAmounts(q.answer), ...entryLines(q.entry).map((l) => l.amount)] : []),
             ...q.mistakes.flatMap((m) => (m.slips ? slipAmounts(m.slips) : m.entry ? entryLines(m.entry).map((l) => l.amount) : [])),
+            ...(q.type === 'table' ? tableNumbers(q.table) : []),
             ...(q.type === 'numeric' ? [q.answer] : []),
             ...q.mistakes.map((m) => m.value).filter((v) => v !== undefined),
           ]);
@@ -125,7 +137,7 @@ for (const { file, data } of files) {
           test('仕訳: 勘定科目はすべて公式の勘定科目表(または補助リスト)にある', () => {
             assert.ok(q.choices.length >= 4 && q.choices.length <= 8, '選択肢は4〜8個');
             assert.equal(new Set(q.choices).size, q.choices.length, '選択肢が重複');
-            for (const c of q.choices) assert.ok(accountIndex.names.has(c), `「${c}」は勘定科目表にない`);
+            for (const c of q.choices) assert.ok(isKnownAccount(accountIndex, c), `「${c}」は勘定科目表にない`);
             for (const l of lines) assert.ok(q.choices.includes(l.account), `正解の科目「${l.account}」が選択肢にない`);
           });
 
@@ -193,9 +205,9 @@ for (const { file, data } of files) {
             }
             assert.ok(q.choices.length >= 4 && q.choices.length <= 8, '選択肢は4〜8個');
             assert.equal(new Set(q.choices).size, q.choices.length);
-            for (const c of q.choices) assert.ok(accountIndex.names.has(c), `「${c}」は勘定科目表にない`);
+            for (const c of q.choices) assert.ok(isKnownAccount(accountIndex, c), `「${c}」は勘定科目表にない`);
             for (const a of slipAccounts(q.answer)) assert.ok(q.choices.includes(a), `「${a}」が選択肢にない`);
-            for (const l of entryLines(q.entry)) assert.ok(accountIndex.names.has(l.account), `「${l.account}」は勘定科目表にない`);
+            for (const l of entryLines(q.entry)) assert.ok(isKnownAccount(accountIndex, l.account), `「${l.account}」は勘定科目表にない`);
           });
 
           test('伝票の採点: 正解は正解、誤答は不正解で、その誤答として判定される', () => {
@@ -229,6 +241,52 @@ for (const { file, data } of files) {
               assert.equal(gradeQuestion(q, m.options, accountIndex).mistake, m);
             }
             assert.equal(gradeQuestion(q, [...q.answer].reverse(), accountIndex).correct, true);
+          });
+        }
+
+        if (q.type === 'table') {
+          test('表: 形がそろっていて、空欄の正解は決まった形', () => {
+            const cols = q.table.columns.length;
+            for (const row of q.table.rows) assert.equal(row.length, cols, '行の欄の数が見出しと違う');
+            const blanks = tableBlanks(q.table);
+            assert.ok(blanks.length >= 1, '空欄がない');
+            for (const { cell } of blanks) {
+              if (cell.kind === 'select') {
+                assert.ok(Array.isArray(cell.options) && cell.options.includes(cell.answer), '選択欄の正解が選択肢にない');
+              } else {
+                assert.equal(cell.kind, 'number');
+                assert.ok(cell.answer === null || Number.isSafeInteger(cell.answer), `数値欄の正解 ${cell.answer}`);
+              }
+            }
+          });
+
+          test('表: 表の中の合計・差額が、計算し直しても一致する', () => {
+            for (const ch of q.checks) assert.ok(verifyTableCheck(q.table, ch, OPS), `${ch.label} が合わない`);
+          });
+
+          test('表: 空欄の正解の金額は、問題文・表の既知の数字・計算ステップのどれか', () => {
+            const given = new Set([
+              ...moneyNumbers(q.prompt),
+              ...q.table.rows.flat().filter((c) => typeof c === 'number'),
+              ...(q.calc ?? []).map((st) => st.value),
+            ]);
+            for (const { cell } of tableBlanks(q.table)) {
+              if (cell.kind === 'number' && cell.answer !== null) assert.ok(given.has(cell.answer), `金額 ${cell.answer} の根拠がない`);
+            }
+          });
+
+          test('表の採点: 正解をすべて入れると正解、よくある誤答はその欄の誤答として判定される', () => {
+            const full = tableAnswerInput(q.table);
+            assert.equal(gradeQuestion(q, full, accountIndex).correct, true);
+            for (const m of q.mistakes) {
+              assert.ok(Array.isArray(m.cell), '表の誤答には cell([行, 列])が必要');
+              const key = cellKey(m.cell[0], m.cell[1]);
+              assert.ok(key in full, `誤答の欄 ${key} は空欄ではない`);
+              const input = { ...full, [key]: m.value == null ? '' : String(m.value) };
+              const r = gradeQuestion(q, input, accountIndex);
+              assert.equal(r.correct, false, `誤答が正解扱い: ${m.why}`);
+              assert.ok(r.mistakes.includes(m), `誤答として判定されない: ${m.why}`);
+            }
           });
         }
 
