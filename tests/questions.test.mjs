@@ -291,7 +291,7 @@ for (const { file, data } of files) {
         }
 
         if (q.type === 'numeric') {
-          test('数値: 正解は計算ステップの最後の結果、誤答もコードで計算した値', () => {
+          test('数値: 正解は計算ステップの最後の結果、誤答はコードで計算した値か問題文の数字', () => {
             assert.ok(Number.isSafeInteger(q.answer));
             assert.ok(q.calc?.length, '数値問題には計算ステップが必要');
             assert.equal(q.calc.at(-1).value, q.answer);
@@ -299,7 +299,8 @@ for (const { file, data } of files) {
             assert.equal(new Set(values).size, values.length, '誤答の値が重複');
             for (const m of q.mistakes) {
               assert.ok(Number.isSafeInteger(m.value) && m.value !== q.answer);
-              assert.ok(m.calc?.length && m.calc.at(-1).value === m.value, '誤答の値も計算ステップで出す');
+              const given = moneyNumbers(q.prompt).includes(m.value);
+              assert.ok(given || (m.calc?.length && m.calc.at(-1).value === m.value), '誤答の値は計算ステップで出すか、問題文にある数字');
               assert.equal(gradeQuestion(q, m.value, accountIndex).mistake, m);
             }
             assert.equal(gradeQuestion(q, q.answer, accountIndex).correct, true);
