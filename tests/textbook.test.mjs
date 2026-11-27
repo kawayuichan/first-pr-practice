@@ -1,5 +1,5 @@
 // 参考書の自動テスト
-// - 構成: 要点3行 → 仕訳パターン → T勘定・ボックス図 → 引っかけポイント → 決算書ではここに出る → 確認問題
+// - 構成: 要点3行 → 仕訳パターン → T勘定・ボックス図 →(ここを覚える)→ 引っかけポイント → 決算書ではここに出る → 確認問題
 // - {{ 計算式 }} がすべて計算できる、仕訳の表の貸借が一致する
 // - 旧基準・1級の用語は「範囲外」「旧基準」「1級」と同じ行でしか使わない
 
@@ -50,6 +50,15 @@ for (const file of sources) {
       const sec = src.split(/^## .*\{#summary\}\s*$/m)[1].split(/^## /m)[0];
       const items = sec.split('\n').filter((l) => /^\d+\.\s/.test(l));
       assert.equal(items.length, 3);
+    });
+
+    test('「ここを覚える」ボックスが1つあり、3〜5個の項目が引っかけポイントの直前にある', () => {
+      const boxes = [...src.matchAll(/^> \[!覚える\]\s*\n((?:> .*\n)+)/gm)];
+      assert.equal(boxes.length, 1, '「> [!覚える]」のボックスがちょうど1つ必要');
+      const items = boxes[0][1].split('\n').filter((l) => /^> - /.test(l));
+      assert.ok(items.length >= 3 && items.length <= 5, `項目は3〜5個(今は${items.length}個)`);
+      const after = src.slice(boxes[0].index + boxes[0][0].length);
+      assert.match(after, /^\s*## .*\{#traps\}/, '引っかけポイントの直前に置く');
     });
 
     test('{{ 計算式 }} がすべて計算でき、生成された参考書と一致する', () => {

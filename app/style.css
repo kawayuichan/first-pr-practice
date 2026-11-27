@@ -22,6 +22,10 @@
   --slip-out-bg: #eaf1fc;
   --slip-transfer: #4a5568;
   --slip-transfer-bg: #eef0f3;
+  --hl: #ffe46b;
+  --memo-bg: #fffbea;
+  --memo-line: #f0b400;
+  --memo-title: #8a5a00;
   --radius: 12px;
   --shadow: 0 1px 2px rgba(20, 30, 50, 0.06), 0 2px 8px rgba(20, 30, 50, 0.05);
   color-scheme: light;
@@ -50,6 +54,10 @@
     --slip-out-bg: #172a47;
     --slip-transfer: #b4bfcf;
     --slip-transfer-bg: #232d3d;
+    --hl: rgba(240, 192, 90, 0.42);
+    --memo-bg: var(--surface);
+    --memo-line: #e0a82e;
+    --memo-title: #f0c05a;
     --shadow: none;
     color-scheme: dark;
   }
@@ -76,6 +84,10 @@
   --slip-out-bg: #172a47;
   --slip-transfer: #b4bfcf;
   --slip-transfer-bg: #232d3d;
+  --hl: rgba(240, 192, 90, 0.42);
+  --memo-bg: var(--surface);
+  --memo-line: #e0a82e;
+  --memo-title: #f0c05a;
   --shadow: none;
   color-scheme: dark;
 }
@@ -375,3 +387,25 @@ table.md-wide td:first-child { white-space: normal; min-width: 6.5em; max-width:
 /* 穴埋めの表: 左端の行の名前は折り返して幅を取りすぎないように。科目を選ぶ欄は文字が切れない幅に */
 table.fill-table td:first-child { white-space: normal; min-width: 7.5em; max-width: 9.5em; }
 table.fill-table td.tb-blank select { min-width: 8.5em; }
+
+/* 大事なところ: 参考書と解説の太字に蛍光ペン(下半分に黄色のマーカー) */
+.textbook strong, .explain strong {
+  font-weight: 700;
+  background: linear-gradient(transparent 55%, var(--hl) 55%);
+  padding: 0 1px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* 「ここを覚える」ボックス(参考書の > [!覚える]) */
+.memo {
+  margin: 16px 0;
+  padding: 10px 14px;
+  background: var(--memo-bg);
+  border: 2px solid var(--memo-line);
+  border-radius: var(--radius);
+}
+.memo-title { font-weight: 700; color: var(--memo-title); margin-bottom: 4px; }
+.memo ul, .memo ol { margin: 0; padding-left: 1.3em; }
+.memo li { margin: 4px 0; }
+.memo p { margin: 0; }

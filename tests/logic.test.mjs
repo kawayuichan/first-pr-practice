@@ -228,6 +228,18 @@ describe('2段の見出しの表(精算表など)', () => {
   });
 });
 
+describe('「ここを覚える」ボックス', () => {
+  test('「> [!覚える]」で始まる引用をボックスにする', () => {
+    const { html } = renderMarkdown('> [!覚える]\n> - 前払 = **来期の分**\n> - 未払 = 当期の分');
+    assert.match(html, /<aside class="memo"><div class="memo-title">📌 ここを覚える<\/div><ul>/);
+    assert.match(html, /<strong>来期の分<\/strong>/);
+    assert.ok(!html.includes('[!覚える]'));
+  });
+  test('ふつうの引用はそのまま', () => {
+    assert.match(renderMarkdown('> 注意').html, /^<blockquote>/);
+  });
+});
+
 describe('複数選択の採点', () => {
   const q = { type: 'multi', answer: [1, 3, 5], mistakes: [{ options: [1, 5], why: 'x' }] };
   test('選ぶ順番は問わない', () => assert.equal(gradeMulti(q, [5, 1, 3]).correct, true));
