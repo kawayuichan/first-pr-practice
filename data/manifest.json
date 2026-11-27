@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "0fce735f5331",
+  "version": "06383981d24e",
   "topics": [
     {
       "id": "B01",
@@ -132,10 +132,10 @@
       "id": "C01",
       "phase": 1,
       "name": "商品売買(2級)",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
-      "needs_review": 0
+      "textbook": "textbook/C01.md",
+      "questions": "data/questions/C01.json",
+      "count": 12,
+      "needs_review": 1
     },
     {
       "id": "C02",
@@ -544,6 +544,7 @@
     "data/questions/B12.json",
     "data/questions/B13.json",
     "data/questions/B14.json",
+    "data/questions/C01.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -557,6 +558,7 @@
     "textbook/B11.md",
     "textbook/B12.md",
     "textbook/B13.md",
-    "textbook/B14.md"
+    "textbook/B14.md",
+    "textbook/C01.md"
   ]
 }
