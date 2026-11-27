@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "60677dbd6ec6",
+  "version": "6ec155193e8d",
   "topics": [
     {
       "id": "B01",
@@ -267,9 +267,9 @@
       "id": "C16",
       "phase": 1,
       "name": "外貨建取引",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C16.md",
+      "questions": "data/questions/C16.json",
+      "count": 12,
       "needs_review": 0
     },
     {
@@ -559,6 +559,7 @@
     "data/questions/C13.json",
     "data/questions/C14.json",
     "data/questions/C15.json",
+    "data/questions/C16.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -587,6 +588,7 @@
     "textbook/C12.md",
     "textbook/C13.md",
     "textbook/C14.md",
-    "textbook/C15.md"
+    "textbook/C15.md",
+    "textbook/C16.md"
   ]
 }
