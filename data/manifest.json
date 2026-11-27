@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "a8191db80414",
+  "version": "a56fa2b67875",
   "topics": [
     {
       "id": "B01",
@@ -249,9 +249,9 @@
       "id": "C14",
       "phase": 1,
       "name": "収益認識",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C14.md",
+      "questions": "data/questions/C14.json",
+      "count": 12,
       "needs_review": 0
     },
     {
@@ -557,6 +557,7 @@
     "data/questions/C11.json",
     "data/questions/C12.json",
     "data/questions/C13.json",
+    "data/questions/C14.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -583,6 +584,7 @@
     "textbook/C10.md",
     "textbook/C11.md",
     "textbook/C12.md",
-    "textbook/C13.md"
+    "textbook/C13.md",
+    "textbook/C14.md"
   ]
 }
