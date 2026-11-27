@@ -354,5 +354,5 @@ table.fill-table td.cell-ok:first-child { background: var(--ok-bg); }
 table.fill-table td.cell-ng:first-child { background: var(--ng-bg); }
 
 /* 穴埋めの表: 左端の行の名前は折り返して幅を取りすぎないように。科目を選ぶ欄は文字が切れない幅に */
-table.fill-table td:first-child { white-space: normal; min-width: 6.5em; max-width: 9.5em; }
+table.fill-table td:first-child { white-space: normal; min-width: 7.5em; max-width: 9.5em; }
 table.fill-table td.tb-blank select { min-width: 8.5em; }
