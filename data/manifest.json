@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "fd1602601317",
+  "version": "7a939153440e",
   "topics": [
     {
       "id": "B01",
@@ -330,9 +330,9 @@
       "id": "K03",
       "phase": 2,
       "name": "労務費",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/K03.md",
+      "questions": "data/questions/K03.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -566,6 +566,7 @@
     "data/questions/C20.json",
     "data/questions/K01.json",
     "data/questions/K02.json",
+    "data/questions/K03.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -601,6 +602,7 @@
     "textbook/C19.md",
     "textbook/C20.md",
     "textbook/K01.md",
-    "textbook/K02.md"
+    "textbook/K02.md",
+    "textbook/K03.md"
   ]
 }
