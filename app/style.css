@@ -360,6 +360,13 @@ table.md-wide thead tr + tr th:first-child, table.fill-table thead tr + tr th:fi
   position: static; box-shadow: none; z-index: auto;
 }
 th.th-group { text-align: center; }
+/* 左右に分かれた表(勘定式の財務諸表): 広い画面では横に並べ、スマホでは上下に並べる。左端の固定はしない */
+.sides { display: flex; flex-wrap: wrap; gap: 0 12px; }
+.sides > .table-wrap { flex: 1 1 280px; min-width: 0; margin-top: 0; }
+table.side-table th:first-child, table.side-table td:first-child {
+  position: static; box-shadow: none; max-width: none; background: inherit;
+}
+table.side-table thead th:first-child { background: var(--surface-2); }
 table.fill-table td.cell-ok:first-child { background: var(--ok-bg); }
 table.fill-table td.cell-ng:first-child { background: var(--ng-bg); }
 
