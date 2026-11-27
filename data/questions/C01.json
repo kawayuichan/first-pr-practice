@@ -312,8 +312,7 @@
         "topic": "C01",
         "anchor": "monthly"
       },
-      "needs_review": true,
-      "needs_review_reason": "区分表の2級の列に「(月次による処理)」と名前だけがあり、説明書にも具体的な説明がない。三分法で毎月末に売上原価を計算する(毎月しーくりくりしーを行う)という一般的な意味で作った。"
+      "needs_review": false
     },
     {
       "id": "C01-005",

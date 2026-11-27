@@ -1,6 +1,6 @@
 // C01 商品売買(2級) の問題(12問)
 // 仕訳5問・数値5問・表1問(期末商品の図)・複数選択1問。金額はすべて step() で計算する。
-// 決めたこと: 「月次による処理」は区分表に説明がないため、一般的な意味(毎月末に売上原価を計算)で1問作り needs_review を付ける。
+// 決めたこと: 「月次による処理」は区分表に説明がないため、一般的な意味(毎月末に売上原価を計算)で1問作った(ユーザー確認済み)。
 // 棚卸減耗損・商品評価損を売上原価に含める処理も扱う。売上割戻は C14。
 
 import { blankNum, blankSelect, journalQ, line, multiQ, numericQ, step, tableQ, yen } from '../lib/qlib.mjs';
@@ -103,7 +103,7 @@ export default function build() {
     );
   }
 
-  // 4. 月次による処理(needs_review)
+  // 4. 月次による処理(区分表に説明がないため一般的な意味で作った。2026-11-27 ユーザー確認済み。scope.md 8章の8)
   {
     const begin = 48000;
     const end = 57000;
@@ -124,9 +124,6 @@ export default function build() {
           },
         ],
         ref: { topic: T, anchor: 'monthly' },
-        needs_review: true,
-        needs_review_reason:
-          '区分表の2級の列に「(月次による処理)」と名前だけがあり、説明書にも具体的な説明がない。三分法で毎月末に売上原価を計算する(毎月しーくりくりしーを行う)という一般的な意味で作った。',
       }),
     );
   }
