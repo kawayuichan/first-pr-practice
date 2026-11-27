@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "5b8820603562",
+  "version": "92092668d9a2",
   "topics": [
     {
       "id": "B01",
@@ -492,9 +492,9 @@
       "id": "C28",
       "phase": 3,
       "name": "連結③成果連結",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C28.md",
+      "questions": "data/questions/C28.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -571,6 +571,7 @@
     "data/questions/C25.json",
     "data/questions/C26.json",
     "data/questions/C27.json",
+    "data/questions/C28.json",
     "data/questions/K01.json",
     "data/questions/K02.json",
     "data/questions/K03.json",
@@ -625,6 +626,7 @@
     "textbook/C25.md",
     "textbook/C26.md",
     "textbook/C27.md",
+    "textbook/C28.md",
     "textbook/K01.md",
     "textbook/K02.md",
     "textbook/K03.md",
