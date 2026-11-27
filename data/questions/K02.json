@@ -4,7 +4,7 @@
     {
       "id": "K02-001",
       "topic": "K02",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 1,
       "prompt": "材料 ¥450,000 を掛けで買い、引取運賃 ¥9,000 を現金で支払った。",
@@ -82,7 +82,7 @@
     {
       "id": "K02-002",
       "topic": "K02",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 2,
       "prompt": "材料 ¥800,000 を掛けで買った。材料副費は、購入代価の3%を予定配賦する。",
@@ -170,7 +170,7 @@
     {
       "id": "K02-003",
       "topic": "K02",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 1,
       "prompt": "当月の材料の保管費・検収費など(材料副費の実際発生額) ¥22,800 を、普通預金口座から支払った。",
@@ -226,7 +226,7 @@
     {
       "id": "K02-004",
       "topic": "K02",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 2,
       "prompt": "月末。材料副費の予定配賦額は ¥24,000、実際発生額は ¥22,800 だった。差額を材料副費差異勘定に振り替える。",
@@ -470,7 +470,7 @@
     {
       "id": "K02-007",
       "topic": "K02",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 2,
       "prompt": "材料 500kg を消費した(直接材料 420kg、間接材料 80kg)。消費額は予定価格 @¥310 で計算する。",
@@ -558,7 +558,7 @@
     {
       "id": "K02-008",
       "topic": "K02",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 3,
       "prompt": "月末。当月の材料の予定消費額は ¥155,000、実際消費額は ¥158,000 だった。差額を材料消費価格差異勘定に振り替える。",
@@ -633,7 +633,7 @@
     {
       "id": "K02-009",
       "topic": "K02",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 2,
       "prompt": "月末に材料の実地棚卸をしたところ、帳簿の数量 120kg に対し、実際の数量は 116kg だった(単価 @¥250)。減耗はふつうに起きる程度のものである。",

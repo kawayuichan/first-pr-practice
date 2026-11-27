@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "88cbd9c1954e",
+  "version": "8a86afef00ff",
   "topics": [
     {
       "id": "B01",
@@ -429,9 +429,9 @@
       "id": "C21",
       "phase": 3,
       "name": "決算整理と精算表(2級)",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C21.md",
+      "questions": "data/questions/C21.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -564,6 +564,7 @@
     "data/questions/C18.json",
     "data/questions/C19.json",
     "data/questions/C20.json",
+    "data/questions/C21.json",
     "data/questions/K01.json",
     "data/questions/K02.json",
     "data/questions/K03.json",
@@ -611,6 +612,7 @@
     "textbook/C18.md",
     "textbook/C19.md",
     "textbook/C20.md",
+    "textbook/C21.md",
     "textbook/K01.md",
     "textbook/K02.md",
     "textbook/K03.md",

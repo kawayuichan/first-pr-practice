@@ -183,7 +183,7 @@
     {
       "id": "K01-003",
       "topic": "K01",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 1,
       "prompt": "材料 ¥550,000 を消費した。このうち直接材料費は ¥480,000、間接材料費は ¥70,000 である。",
@@ -274,7 +274,7 @@
     {
       "id": "K01-004",
       "topic": "K01",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 1,
       "prompt": "賃金 ¥500,000 を消費した。このうち直接労務費は ¥360,000、間接労務費は ¥140,000 である。",
@@ -348,7 +348,7 @@
     {
       "id": "K01-005",
       "topic": "K01",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 1,
       "prompt": "製造間接費 ¥320,000 を、製品に配賦した。",
@@ -404,7 +404,7 @@
     {
       "id": "K01-006",
       "topic": "K01",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 1,
       "prompt": "製品が完成した。完成品の製造原価は ¥1,150,000 である。",
@@ -460,7 +460,7 @@
     {
       "id": "K01-007",
       "topic": "K01",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 1,
       "prompt": "製品(製造原価 ¥630,000)を ¥900,000 で売り、代金は掛けとした。売上原価への振替もあわせて行う。",
