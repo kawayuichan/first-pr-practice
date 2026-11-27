@@ -55,8 +55,8 @@
     --slip-transfer: #b4bfcf;
     --slip-transfer-bg: #232d3d;
     --hl: rgba(240, 192, 90, 0.42);
-    --memo-bg: #2a2410;
-    --memo-line: #b8860b;
+    --memo-bg: var(--surface);
+    --memo-line: #e0a82e;
     --memo-title: #f0c05a;
     --shadow: none;
     color-scheme: dark;
@@ -85,8 +85,8 @@
   --slip-transfer: #b4bfcf;
   --slip-transfer-bg: #232d3d;
   --hl: rgba(240, 192, 90, 0.42);
-  --memo-bg: #2a2410;
-  --memo-line: #b8860b;
+  --memo-bg: var(--surface);
+  --memo-line: #e0a82e;
   --memo-title: #f0c05a;
   --shadow: none;
   color-scheme: dark;
