@@ -114,7 +114,8 @@ export const blankSelect = (options, answer) => ({ blank: true, kind: 'select', 
 
 /**
  * 表の穴埋め問題(出納帳・商品有高帳など)。
- * checks: 表の中の合計・差額の関係 [{ label, op, args: [数 または [行, 列]], result: [行, 列] }]。テストで計算し直す
+ * checks: 表の中の合計・差額の関係 [{ label, op, args: [数 または [行, 列] または ['-', 行, 列]], result: [行, 列] }]。
+ *   ['-', 行, 列] はその欄を引く(op: 'add' と組み合わせて「a + b − c」を表す)。テストで計算し直す
  */
 export function tableQ(o) {
   common(o);
