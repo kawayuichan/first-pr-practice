@@ -235,7 +235,15 @@ export function renderMarkdown(md, opts = {}) {
     while (i < lines.length && !isBlank(lines[i]) && !(buf.length && startsBlock(lines[i], lines[i + 1]))) {
       buf.push(lines[i++].trim());
     }
-    html.push(`<p>${buf.map((l) => renderInline(l, opts)).join('<br>')}</p>`);
+    let body = buf.map((l) => renderInline(l, opts)).join('<br>');
+    // 表のすぐ上の1行の見出し(「**当座預金**」「**会社側**(仕訳する)」など)は、太字だけにして蛍光ペンを付けない
+    let j = i;
+    while (j < lines.length && isBlank(lines[j])) j++;
+    const tableNext = j + 1 < lines.length && /^\|/.test(lines[j]) && TABLE_SEP.test(lines[j + 1]);
+    // ただし「**先入先出法**: 〜」のような用語の説明は大事な言葉なので、そのまま(見出しのあとに続けてよいのは(〜)の注記だけ)
+    const titleOnly = buf.length === 1 && /^\*\*[^*]+\*\*\s*(?:[((].*)?$/.test(buf[0]);
+    if (tableNext && titleOnly) body = body.replace(/^<strong(?: class="label")?>/, '<strong class="label">');
+    html.push(`<p>${body}</p>`);
   }
   return { html: html.join('\n'), headings };
 }
