@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "ebc6f69a63e5",
+  "version": "a7a90aa500bd",
   "topics": [
     {
       "id": "B01",
@@ -357,9 +357,9 @@
       "id": "K06",
       "phase": 2,
       "name": "部門別計算",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/K06.md",
+      "questions": "data/questions/K06.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -569,6 +569,7 @@
     "data/questions/K03.json",
     "data/questions/K04.json",
     "data/questions/K05.json",
+    "data/questions/K06.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -607,6 +608,7 @@
     "textbook/K02.md",
     "textbook/K03.md",
     "textbook/K04.md",
-    "textbook/K05.md"
+    "textbook/K05.md",
+    "textbook/K06.md"
   ]
 }
