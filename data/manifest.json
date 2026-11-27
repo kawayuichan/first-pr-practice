@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "5166a3d480ca",
+  "version": "75a6afa94fa5",
   "topics": [
     {
       "id": "B01",
@@ -78,10 +78,10 @@
       "id": "B09",
       "phase": 0,
       "name": "有形固定資産①",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
-      "needs_review": 0
+      "textbook": "textbook/B09.md",
+      "questions": "data/questions/B09.json",
+      "count": 12,
+      "needs_review": 1
     },
     {
       "id": "B10",
@@ -538,6 +538,7 @@
     "data/questions/B06.json",
     "data/questions/B07.json",
     "data/questions/B08.json",
+    "data/questions/B09.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -545,6 +546,7 @@
     "textbook/B05.md",
     "textbook/B06.md",
     "textbook/B07.md",
-    "textbook/B08.md"
+    "textbook/B08.md",
+    "textbook/B09.md"
   ]
 }

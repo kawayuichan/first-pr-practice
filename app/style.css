@@ -212,7 +212,10 @@ th { background: var(--surface-2); font-weight: 600; text-align: left; }
 .al-center { text-align: center; }
 table.md-journal th, table.md-journal td { white-space: nowrap; }
 /* 科目名が長い(社会保険料預り金など)ときは、スマホの幅に収まるよう科目の欄だけ折り返す。金額は折り返さない */
-table.md-journal td:nth-child(odd) { white-space: normal; min-width: 4.5em; }
+table.md-journal td:nth-child(odd) { white-space: normal; min-width: 5em; }
+/* 仕訳の表はスマホでは4列が窮屈なので、左右の余白と ✓・× の幅を少し詰める */
+table.md-journal th, table.md-journal td { padding-left: 6px; padding-right: 6px; }
+table.md-journal .mk { width: auto; margin-right: 2px; font-size: 0.85em; }
 table.md-table td:first-child, table.md-table th:first-child { white-space: nowrap; }
 table.md-journal th:nth-child(3), table.md-journal td:nth-child(3) { border-left: 2px solid var(--text); }
 table.md-taccount { max-width: 520px; }
