@@ -40,7 +40,7 @@
     {
       "id": "K04-002",
       "topic": "K04",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 1,
       "prompt": "製品の一部の加工を外部に頼み、外注加工賃 ¥150,000 を当座預金口座から支払った。外注加工賃は直接経費として処理する。",
@@ -96,7 +96,7 @@
     {
       "id": "K04-003",
       "topic": "K04",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 2,
       "prompt": "工場の建物の減価償却費(年額 ¥3,000,000)の当月分を計上した。記帳は間接法。",

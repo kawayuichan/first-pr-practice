@@ -39,7 +39,8 @@ export function journalQ(o) {
   return {
     id: o.id,
     topic: o.topic,
-    format: o.format ?? 'q1_journal',
+    // 工業簿記(K)の仕訳は第4問(1)、それ以外は第1問の形式
+    format: o.format ?? (o.topic.startsWith('K') ? 'q4_journal' : 'q1_journal'),
     type: 'journal',
     difficulty: o.difficulty,
     prompt: o.prompt,

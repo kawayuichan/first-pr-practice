@@ -4,7 +4,7 @@
     {
       "id": "K03-001",
       "topic": "K03",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 1,
       "prompt": "当月の賃金の総額 ¥950,000 から、源泉所得税など ¥92,000 を差し引き、残りを当座預金口座から支払った。",
@@ -74,7 +74,7 @@
     {
       "id": "K03-002",
       "topic": "K03",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 2,
       "prompt": "直接工の当月の作業時間は、直接作業 600時間、間接作業 50時間、手待 20時間だった。予定賃率(1時間 ¥1,300)で消費額を計算する。",
@@ -237,7 +237,7 @@
     {
       "id": "K03-004",
       "topic": "K03",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 2,
       "prompt": "間接工の当月の賃金の消費額(要支払額 ¥333,000)を計上する。",
@@ -293,7 +293,7 @@
     {
       "id": "K03-005",
       "topic": "K03",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 3,
       "prompt": "月末。直接工の賃金の予定消費額は ¥871,000、実際消費額(要支払額)は ¥935,000 だった。差額を賃率差異勘定に振り替える。",
@@ -359,7 +359,7 @@
     {
       "id": "K03-006",
       "topic": "K03",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 1,
       "prompt": "月末に、当月分の賃金のうちまだ支払っていない ¥72,000 を計上した。",
@@ -415,7 +415,7 @@
     {
       "id": "K03-007",
       "topic": "K03",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 1,
       "prompt": "月初に、前月末に計上した未払賃金 ¥72,000 を、賃金・給料勘定に振り替えた(再振替)。",

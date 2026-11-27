@@ -57,7 +57,7 @@
     {
       "id": "K05-002",
       "topic": "K05",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 1,
       "prompt": "製造間接費の予定配賦率は1時間 ¥300(年間の基準操業度 18,000時間)。当月の実際の直接作業時間は 1,250時間だった。製造間接費を予定配賦する。",
@@ -143,7 +143,7 @@
     {
       "id": "K05-003",
       "topic": "K05",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 2,
       "prompt": "月末。製造間接費の実際発生額は ¥390,000、予定配賦額は ¥375,000 だった。差額を製造間接費配賦差異勘定に振り替える。",
@@ -520,7 +520,7 @@
     {
       "id": "K05-008",
       "topic": "K05",
-      "format": "q1_journal",
+      "format": "q4_journal",
       "type": "journal",
       "difficulty": 2,
       "prompt": "会計年度末に、製造間接費配賦差異の借方残高 ¥24,000(不利差異)を、売上原価に振り替えた。",
