@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "c3821a1a6737",
+  "version": "0836a25078da",
   "topics": [
     {
       "id": "B01",
@@ -285,9 +285,9 @@
       "id": "C18",
       "phase": 1,
       "name": "税効果会計",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C18.md",
+      "questions": "data/questions/C18.json",
+      "count": 12,
       "needs_review": 0
     },
     {
@@ -561,6 +561,7 @@
     "data/questions/C15.json",
     "data/questions/C16.json",
     "data/questions/C17.json",
+    "data/questions/C18.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -591,6 +592,7 @@
     "textbook/C14.md",
     "textbook/C15.md",
     "textbook/C16.md",
-    "textbook/C17.md"
+    "textbook/C17.md",
+    "textbook/C18.md"
   ]
 }
