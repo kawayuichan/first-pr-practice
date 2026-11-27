@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "5396aca23337",
+  "version": "ebc6f69a63e5",
   "topics": [
     {
       "id": "B01",
@@ -348,9 +348,9 @@
       "id": "K05",
       "phase": 2,
       "name": "製造間接費",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/K05.md",
+      "questions": "data/questions/K05.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -568,6 +568,7 @@
     "data/questions/K02.json",
     "data/questions/K03.json",
     "data/questions/K04.json",
+    "data/questions/K05.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -605,6 +606,7 @@
     "textbook/K01.md",
     "textbook/K02.md",
     "textbook/K03.md",
-    "textbook/K04.md"
+    "textbook/K04.md",
+    "textbook/K05.md"
   ]
 }
