@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "aa377c10b72c",
+  "version": "83cdea7c97fd",
   "topics": [
     {
       "id": "B01",
@@ -420,9 +420,9 @@
       "id": "K13",
       "phase": 2,
       "name": "製品の受払い・本社工場会計",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/K13.md",
+      "questions": "data/questions/K13.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -576,6 +576,7 @@
     "data/questions/K10.json",
     "data/questions/K11.json",
     "data/questions/K12.json",
+    "data/questions/K13.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -621,6 +622,7 @@
     "textbook/K09.md",
     "textbook/K10.md",
     "textbook/K11.md",
-    "textbook/K12.md"
+    "textbook/K12.md",
+    "textbook/K13.md"
   ]
 }
