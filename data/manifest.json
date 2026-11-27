@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "77bd907dd5d4",
+  "version": "56f635ece1d0",
   "topics": [
     {
       "id": "B01",
@@ -204,9 +204,9 @@
       "id": "C09",
       "phase": 1,
       "name": "有価証券②満期保有・子会社・その他",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C09.md",
+      "questions": "data/questions/C09.json",
+      "count": 12,
       "needs_review": 0
     },
     {
@@ -552,6 +552,7 @@
     "data/questions/C06.json",
     "data/questions/C07.json",
     "data/questions/C08.json",
+    "data/questions/C09.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -573,6 +574,7 @@
     "textbook/C05.md",
     "textbook/C06.md",
     "textbook/C07.md",
-    "textbook/C08.md"
+    "textbook/C08.md",
+    "textbook/C09.md"
   ]
 }
