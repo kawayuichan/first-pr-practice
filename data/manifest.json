@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "3eef7c1bf1dc",
+  "version": "a8191db80414",
   "topics": [
     {
       "id": "B01",
@@ -240,9 +240,9 @@
       "id": "C13",
       "phase": 1,
       "name": "リース(新基準)",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C13.md",
+      "questions": "data/questions/C13.json",
+      "count": 12,
       "needs_review": 0
     },
     {
@@ -556,6 +556,7 @@
     "data/questions/C10.json",
     "data/questions/C11.json",
     "data/questions/C12.json",
+    "data/questions/C13.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -581,6 +582,7 @@
     "textbook/C09.md",
     "textbook/C10.md",
     "textbook/C11.md",
-    "textbook/C12.md"
+    "textbook/C12.md",
+    "textbook/C13.md"
   ]
 }
