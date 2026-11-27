@@ -28,13 +28,17 @@ export function renderInline(src, opts = {}) {
         out += `<a href="${escapeHtml(href)}"${ext}>${renderInline(m[2], opts)}</a>`;
       }
     } else {
-      out += `<strong>${renderInline(m[4], opts)}</strong>`;
+      // 「例3」「例6(受け取る側)」のような例の見出しは、太字だけにして蛍光ペンを付けない(大事な言葉ではないため)
+      const cls = EXAMPLE_LABEL.test(m[4]) ? ' class="label"' : '';
+      out += `<strong${cls}>${renderInline(m[4], opts)}</strong>`;
     }
     last = re.lastIndex;
   }
   return out + escapeHtml(src.slice(last));
 }
 
+/** 例の見出し: 「例」「例3」「例6(受け取る側)」 */
+const EXAMPLE_LABEL = /^例\d*(?:[((][^))]*[))])?$/;
 const isBlank = (l) => /^\s*$/.test(l);
 const HEADING = /^(#{1,4})\s+(.*?)(?:\s+\{#([\w-]+)\})?\s*$/;
 const LIST_ITEM = /^(\s*)([-*]|\d+\.)\s+(.*)$/;
