@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "f06b1ad74f27",
+  "version": "092d6c98855e",
   "topics": [
     {
       "id": "B01",
@@ -159,9 +159,9 @@
       "id": "C04",
       "phase": 1,
       "name": "債務の保証",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C04.md",
+      "questions": "data/questions/C04.json",
+      "count": 6,
       "needs_review": 0
     },
     {
@@ -547,6 +547,7 @@
     "data/questions/C01.json",
     "data/questions/C02.json",
     "data/questions/C03.json",
+    "data/questions/C04.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -563,6 +564,7 @@
     "textbook/B14.md",
     "textbook/C01.md",
     "textbook/C02.md",
-    "textbook/C03.md"
+    "textbook/C03.md",
+    "textbook/C04.md"
   ]
 }
