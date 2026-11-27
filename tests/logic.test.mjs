@@ -7,6 +7,7 @@ import { describe, test } from 'node:test';
 import { makeStep, verifyStep } from '../app/lib/calc.js';
 import { fmt, parseAmount, yen } from '../app/lib/format.js';
 import {
+  buildAccountIndex,
   entryNet,
   gradeJournal,
   gradeMulti,
@@ -361,6 +362,23 @@ describe('ビルド', () => {
       const p = path.join(ROOT, f);
       assert.ok(fs.existsSync(p), `${f} がない。npm run build を実行`);
       assert.equal(fs.readFileSync(p, 'utf8'), content, `${f} が古い。npm run build を実行`);
+    }
+  });
+});
+
+describe('補助の勘定科目リスト(公式表外)', () => {
+  test('どの科目にも「公式表外」と根拠があり、公式表の科目と重ならない', async () => {
+    const fs = await import('node:fs');
+    const sup = JSON.parse(fs.readFileSync(new URL('../data/accounts_supplement.json', import.meta.url), 'utf8'));
+    const off = JSON.parse(fs.readFileSync(new URL('../data/official/accounts_2027.json', import.meta.url), 'utf8'));
+    const offIndex = buildAccountIndex(off, { accounts: [] });
+    const names = new Set();
+    for (const acc of sup.accounts) {
+      assert.equal(acc.status, '公式表外', acc.name);
+      assert.ok(acc.basis && acc.basis.trim(), `${acc.name} の根拠がない`);
+      assert.ok(!offIndex.names.has(acc.name), `${acc.name} は公式表にある`);
+      assert.ok(!names.has(acc.name), `${acc.name} が重複`);
+      names.add(acc.name);
     }
   });
 });
