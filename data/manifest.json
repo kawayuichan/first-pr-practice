@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "c6e4d7015c5b",
+  "version": "f3a15605773c",
   "topics": [
     {
       "id": "B01",
@@ -186,9 +186,9 @@
       "id": "C07",
       "phase": 1,
       "name": "ファクタリング",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C07.md",
+      "questions": "data/questions/C07.json",
+      "count": 8,
       "needs_review": 0
     },
     {
@@ -550,6 +550,7 @@
     "data/questions/C04.json",
     "data/questions/C05.json",
     "data/questions/C06.json",
+    "data/questions/C07.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -569,6 +570,7 @@
     "textbook/C03.md",
     "textbook/C04.md",
     "textbook/C05.md",
-    "textbook/C06.md"
+    "textbook/C06.md",
+    "textbook/C07.md"
   ]
 }

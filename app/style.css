@@ -401,6 +401,8 @@ table.fill-table td.tb-blank.tb-short select { min-width: 4.8em; }
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
+/* 例の見出し(例1・例2…)は太字だけ。蛍光ペンは付けない */
+.textbook strong.label, .explain strong.label { background: none; padding: 0; }
 
 /* 「ここを覚える」ボックス(参考書の > [!覚える]) */
 .memo {

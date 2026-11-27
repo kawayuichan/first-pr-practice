@@ -229,6 +229,23 @@ describe('2段の見出しの表(精算表など)', () => {
   });
 });
 
+describe('例の見出し', () => {
+  test('「例3」「例6(受け取る側)」は蛍光ペンなしの太字(class="label")、ふつうの太字はそのまま', () => {
+    assert.match(renderMarkdown('**例3** 商品を売った。').html, /<strong class="label">例3<\/strong>/);
+    assert.match(renderMarkdown('**例6(受け取る側)** 代金を受け取った。').html, /<strong class="label">例6\(受け取る側\)<\/strong>/);
+    assert.match(renderMarkdown('**例** 請求書を受け取った。').html, /<strong class="label">例<\/strong>/);
+    assert.match(renderMarkdown('売掛金は **例外なく** 減らす。').html, /<strong>例外なく<\/strong>/);
+    assert.match(renderMarkdown('**来期の分**').html, /<strong>来期の分<\/strong>/);
+  });
+  test('表のすぐ上の1行の見出しも蛍光ペンなし。用語の説明(「**先入先出法**: 〜」)や表の前でない太字はそのまま', () => {
+    const table = '\n\n| 借方 | 貸方 |\n|---|---|\n| a | b |';
+    assert.match(renderMarkdown('**当座預金**' + table).html, /<p><strong class="label">当座預金<\/strong><\/p>/);
+    assert.match(renderMarkdown('**会社側**(仕訳する)' + table).html, /<p><strong class="label">会社側<\/strong>\(仕訳する\)<\/p>/);
+    assert.match(renderMarkdown('**先入先出法**: 先に仕入れたものから払い出す。' + table).html, /<p><strong>先入先出法<\/strong>:/);
+    assert.match(renderMarkdown('**当座預金**\n\nふつうの文。').html, /<p><strong>当座預金<\/strong><\/p>/);
+  });
+});
+
 describe('「ここを覚える」ボックス', () => {
   test('「> [!覚える]」で始まる引用をボックスにする', () => {
     const { html } = renderMarkdown('> [!覚える]\n> - 前払 = **来期の分**\n> - 未払 = 当期の分');
