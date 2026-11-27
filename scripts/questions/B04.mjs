@@ -7,8 +7,7 @@ const T = 'B04';
 
 // 商品有高帳の列
 const LEDGER_COLUMNS = [
-  { label: '日付' },
-  { label: '摘要' },
+  { label: '日付・摘要' },
   ...['受入', '払出', '残高'].flatMap((g) => [
     { label: `${g}数量`, align: 'right' },
     { label: `${g}単価`, align: 'right' },
@@ -16,7 +15,7 @@ const LEDGER_COLUMNS = [
   ]),
 ];
 // 列番号
-const C = { inQ: 2, inP: 3, inA: 4, outQ: 5, outP: 6, outA: 7, balQ: 8, balP: 9, balA: 10 };
+const C = { inQ: 1, inP: 2, inA: 3, outQ: 4, outP: 5, outA: 6, balQ: 7, balP: 8, balA: 9 };
 const empty3 = [null, null, null];
 
 export default function build() {
@@ -261,16 +260,16 @@ export default function build() {
     const wrong28 = amt('誤答: 残高を @160 で計算', bal28.value, b.p);
 
     const rows = [
-      ['1', '前月繰越', a.q, a.p, aA.value, ...empty3, a.q, a.p, aA.value],
-      ['8', '仕入', b.q, b.p, bA.value, ...empty3, a.q, a.p, aA.value],
-      ['', '', ...empty3, ...empty3, b.q, b.p, bA.value],
-      ['15', '売上', ...empty3, a.q, a.p, blankNum(out15aA.value), ...empty3],
-      ['', '', ...empty3, blankNum(out15b.value), b.p, blankNum(out15bA.value), blankNum(bal15.value), b.p, blankNum(bal15A.value)],
-      ['22', '仕入', c.q, c.p, cA.value, ...empty3, bal15.value, b.p, bal15A.value],
-      ['', '', ...empty3, ...empty3, c.q, c.p, cA.value],
-      ['28', '売上', ...empty3, bal15.value, b.p, blankNum(out28bA.value), ...empty3],
-      ['', '', ...empty3, blankNum(out28c.value), c.p, blankNum(out28cA.value), bal28.value, c.p, blankNum(bal28A.value)],
-      ['', '払出の合計', ...empty3, null, null, blankNum(outTotal.value), ...empty3],
+      ['1日 前月繰越', a.q, a.p, aA.value, ...empty3, a.q, a.p, aA.value],
+      ['8日 仕入', b.q, b.p, bA.value, ...empty3, a.q, a.p, aA.value],
+      ['', ...empty3, ...empty3, b.q, b.p, bA.value],
+      ['15日 売上', ...empty3, a.q, a.p, blankNum(out15aA.value), ...empty3],
+      ['', ...empty3, blankNum(out15b.value), b.p, blankNum(out15bA.value), blankNum(bal15.value), b.p, blankNum(bal15A.value)],
+      ['22日 仕入', c.q, c.p, cA.value, ...empty3, bal15.value, b.p, bal15A.value],
+      ['', ...empty3, ...empty3, c.q, c.p, cA.value],
+      ['28日 売上', ...empty3, bal15.value, b.p, blankNum(out28bA.value), ...empty3],
+      ['', ...empty3, blankNum(out28c.value), c.p, blankNum(out28cA.value), bal28.value, c.p, blankNum(bal28A.value)],
+      ['払出の合計', ...empty3, null, null, blankNum(outTotal.value), ...empty3],
     ];
     const R = { r15a: 3, r15b: 4, r28a: 7, r28b: 8, total: 9 };
     const mulCheck = (r, qc, pc, ac, label) => ({ label, op: 'mul', args: [[r, qc], [r, pc]], result: [r, ac] });
@@ -352,12 +351,12 @@ export default function build() {
     const wrongOut4 = step('誤答: 最後の仕入単価で払い出した', 'mul', [sale2, p3]);
 
     const rows = [
-      ['1', '前月繰越', q0, p0, a0.value, ...empty3, q0, p0, a0.value],
-      ['6', '仕入', q1, p1, a1.value, ...empty3, bal1Q.value, blankNum(avg1.value), blankNum(bal1A.value)],
-      ['14', '売上', ...empty3, sale1, blankNum(avg1.value), blankNum(out2A.value), bal2Q.value, avg1.value, blankNum(bal2A.value)],
-      ['20', '仕入', q3, p3, a3.value, ...empty3, bal3Q.value, blankNum(avg3.value), blankNum(bal3A.value)],
-      ['27', '売上', ...empty3, sale2, avg3.value, blankNum(out4A.value), bal4Q.value, avg3.value, blankNum(bal4A.value)],
-      ['', '払出の合計', ...empty3, null, null, blankNum(outTotal.value), ...empty3],
+      ['1日 前月繰越', q0, p0, a0.value, ...empty3, q0, p0, a0.value],
+      ['6日 仕入', q1, p1, a1.value, ...empty3, bal1Q.value, blankNum(avg1.value), blankNum(bal1A.value)],
+      ['14日 売上', ...empty3, sale1, blankNum(avg1.value), blankNum(out2A.value), bal2Q.value, avg1.value, blankNum(bal2A.value)],
+      ['20日 仕入', q3, p3, a3.value, ...empty3, bal3Q.value, blankNum(avg3.value), blankNum(bal3A.value)],
+      ['27日 売上', ...empty3, sale2, avg3.value, blankNum(out4A.value), bal4Q.value, avg3.value, blankNum(bal4A.value)],
+      ['払出の合計', ...empty3, null, null, blankNum(outTotal.value), ...empty3],
     ];
     questions.push(
       tableQ({
