@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "cc6f83ed4c88",
+  "version": "220b70ea64a3",
   "topics": [
     {
       "id": "B01",
@@ -231,10 +231,10 @@
       "id": "C12",
       "phase": 1,
       "name": "無形固定資産・研究開発費",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
-      "needs_review": 0
+      "textbook": "textbook/C12.md",
+      "questions": "data/questions/C12.json",
+      "count": 10,
+      "needs_review": 1
     },
     {
       "id": "C13",
@@ -555,6 +555,7 @@
     "data/questions/C09.json",
     "data/questions/C10.json",
     "data/questions/C11.json",
+    "data/questions/C12.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -579,6 +580,7 @@
     "textbook/C08.md",
     "textbook/C09.md",
     "textbook/C10.md",
-    "textbook/C11.md"
+    "textbook/C11.md",
+    "textbook/C12.md"
   ]
 }
