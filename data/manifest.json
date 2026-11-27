@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "0827b0492b3e",
+  "version": "0b262b166d4e",
   "topics": [
     {
       "id": "B01",
@@ -474,9 +474,9 @@
       "id": "C26",
       "phase": 3,
       "name": "連結①資本連結",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C26.md",
+      "questions": "data/questions/C26.json",
+      "count": 8,
       "needs_review": 0
     },
     {
@@ -569,6 +569,7 @@
     "data/questions/C23.json",
     "data/questions/C24.json",
     "data/questions/C25.json",
+    "data/questions/C26.json",
     "data/questions/K01.json",
     "data/questions/K02.json",
     "data/questions/K03.json",
@@ -621,6 +622,7 @@
     "textbook/C23.md",
     "textbook/C24.md",
     "textbook/C25.md",
+    "textbook/C26.md",
     "textbook/K01.md",
     "textbook/K02.md",
     "textbook/K03.md",
