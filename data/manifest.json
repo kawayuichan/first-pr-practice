@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "c396501ff086",
+  "version": "7042eb071ea2",
   "topics": [
     {
       "id": "B01",
@@ -303,9 +303,9 @@
       "id": "C20",
       "phase": 1,
       "name": "合併",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C20.md",
+      "questions": "data/questions/C20.json",
+      "count": 8,
       "needs_review": 0
     },
     {
@@ -563,6 +563,7 @@
     "data/questions/C17.json",
     "data/questions/C18.json",
     "data/questions/C19.json",
+    "data/questions/C20.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -595,6 +596,7 @@
     "textbook/C16.md",
     "textbook/C17.md",
     "textbook/C18.md",
-    "textbook/C19.md"
+    "textbook/C19.md",
+    "textbook/C20.md"
   ]
 }
