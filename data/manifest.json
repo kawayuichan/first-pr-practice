@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "92092668d9a2",
+  "version": "f4d61a42b8d4",
   "topics": [
     {
       "id": "B01",
@@ -501,9 +501,9 @@
       "id": "C29",
       "phase": 3,
       "name": "連結④連結精算表",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C29.md",
+      "questions": "data/questions/C29.json",
+      "count": 8,
       "needs_review": 0
     }
   ],
@@ -572,6 +572,7 @@
     "data/questions/C26.json",
     "data/questions/C27.json",
     "data/questions/C28.json",
+    "data/questions/C29.json",
     "data/questions/K01.json",
     "data/questions/K02.json",
     "data/questions/K03.json",
@@ -627,6 +628,7 @@
     "textbook/C26.md",
     "textbook/C27.md",
     "textbook/C28.md",
+    "textbook/C29.md",
     "textbook/K01.md",
     "textbook/K02.md",
     "textbook/K03.md",
