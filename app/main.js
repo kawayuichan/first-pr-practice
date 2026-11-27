@@ -403,6 +403,44 @@ function slipsInline(slips) {
 function tableForm(q) {
   const t = q.table;
   const right = (c) => (t.columns[c].align === 'right' ? ' class="al-right"' : '');
+  const title = t.title ? `<div class="tb-title">${esc(t.title)}</div>` : '';
+  const note = '<p class="muted small">空欄に記入します。何も書かない欄は、空けたままにします。表が横に長いときは、横にスクロールできます。</p>';
+  const cellHtml = (cell, r, c) => {
+    if (cell && typeof cell === 'object' && cell.blank) {
+      const key = `${r},${c}`;
+      const label = `${colName(t.columns[c])}(${r + 1}行目)`;
+      if (cell.kind === 'select') {
+        return `<td class="tb-blank"><select class="tcell" data-key="${key}" aria-label="${esc(label)}"><option value="">選ぶ</option>${cell.options
+          .map((o) => `<option>${esc(o)}</option>`)
+          .join('')}</select></td>`;
+      }
+      return `<td class="tb-blank"><input class="tcell amt" data-key="${key}" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="next" aria-label="${esc(label)}"></td>`;
+    }
+    const v = typeof cell === 'number' ? fmt(cell) : cell == null ? '' : renderInline(String(cell));
+    return `<td${right(c)}>${v}</td>`;
+  };
+
+  // 左右に分かれた表(勘定式の損益計算書・貸借対照表): 左半分と右半分を別の表にする。
+  // 広い画面では横に並び、スマホでは上下に並ぶ(横スクロールしなくてよい)
+  if (t.layout === 'sides') {
+    const half = t.columns.length / 2;
+    const side = (offset) => {
+      const headRow = t.columns
+        .slice(offset, offset + half)
+        .map((col, k) => `<th${right(offset + k)}>${esc(col.label)}</th>`)
+        .join('');
+      const rows = t.rows
+        .map((row, r) => {
+          const cells = row.slice(offset, offset + half);
+          if (cells.every((v) => v == null || v === '')) return '';
+          return `<tr>${cells.map((cell, k) => cellHtml(cell, r, offset + k)).join('')}</tr>`;
+        })
+        .join('');
+      return `<div class="table-wrap"><table class="md-table fill-table side-table"><thead><tr>${headRow}</tr></thead><tbody>${rows}</tbody></table></div>`;
+    };
+    return `${title}<div class="sides">${side(0)}${side(half)}</div>${note}`;
+  }
+
   // 列に group(例: 試算表)があれば、2段の見出しにする(精算表など)
   let head;
   if (t.columns.some((col) => col.group)) {
@@ -424,30 +462,10 @@ function tableForm(q) {
   } else {
     head = `<tr>${t.columns.map((col, c) => `<th${right(c)}>${esc(col.label)}</th>`).join('')}</tr>`;
   }
-  const body = t.rows
-    .map(
-      (row, r) =>
-        `<tr>${row
-          .map((cell, c) => {
-            if (cell && typeof cell === 'object' && cell.blank) {
-              const key = `${r},${c}`;
-              const label = `${colName(t.columns[c])}(${r + 1}行目)`;
-              if (cell.kind === 'select') {
-                return `<td class="tb-blank"><select class="tcell" data-key="${key}" aria-label="${esc(label)}"><option value="">選ぶ</option>${cell.options
-                  .map((o) => `<option>${esc(o)}</option>`)
-                  .join('')}</select></td>`;
-              }
-              return `<td class="tb-blank"><input class="tcell amt" data-key="${key}" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="next" aria-label="${esc(label)}"></td>`;
-            }
-            const v = typeof cell === 'number' ? fmt(cell) : cell == null ? '' : renderInline(String(cell));
-            return `<td${right(c)}>${v}</td>`;
-          })
-          .join('')}</tr>`,
-    )
-    .join('');
-  return `${t.title ? `<div class="tb-title">${esc(t.title)}</div>` : ''}
+  const body = t.rows.map((row, r) => `<tr>${row.map((cell, c) => cellHtml(cell, r, c)).join('')}</tr>`).join('');
+  return `${title}
     <div class="table-wrap"><table class="md-table fill-table"><thead>${head}</thead><tbody>${body}</tbody></table></div>
-    <p class="muted small">空欄に記入します。何も書かない欄は、空けたままにします。表が横に長いときは、横にスクロールできます。</p>`;
+    ${note}`;
 }
 
 function markTableCells(q, res) {
@@ -476,14 +494,17 @@ function rowName(rows, r) {
   return `${r + 1}行目`;
 }
 
-// 列の呼び名。2段の見出しの列は「修正記入の借方」のように呼ぶ
+// 列の呼び名。say があればそれ(例: 「費用の金額」)、2段の見出しの列は「修正記入の借方」のように呼ぶ
 function colName(col) {
-  return col.group ? `${col.group}の${col.label}` : col.label;
+  return col.say ?? (col.group ? `${col.group}の${col.label}` : col.label);
 }
 
+// 欄の呼び名。左右に分かれた表(勘定式の損益計算書など)は rowLabel: 'number' で「「資産」の3行目」と呼ぶ
 function cellLabel(q, cell) {
   const [r, c] = cell;
-  return `「${rowName(q.table.rows, r)}」の「${colName(q.table.columns[c])}」`;
+  const col = colName(q.table.columns[c]);
+  if (q.table.rowLabel === 'number') return `「${col}」の${r + 1}行目`;
+  return `「${rowName(q.table.rows, r)}」の「${col}」`;
 }
 
 function collectAnswer(q) {

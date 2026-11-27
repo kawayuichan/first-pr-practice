@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "af7f56228d3e",
+  "version": "dc391614ae1f",
   "topics": [
     {
       "id": "B01",
@@ -123,9 +123,9 @@
       "id": "B14",
       "phase": 0,
       "name": "決算②締切と財務諸表",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/B14.md",
+      "questions": "data/questions/B14.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -543,6 +543,7 @@
     "data/questions/B11.json",
     "data/questions/B12.json",
     "data/questions/B13.json",
+    "data/questions/B14.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -555,6 +556,7 @@
     "textbook/B10.md",
     "textbook/B11.md",
     "textbook/B12.md",
-    "textbook/B13.md"
+    "textbook/B13.md",
+    "textbook/B14.md"
   ]
 }
