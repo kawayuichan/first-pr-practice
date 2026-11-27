@@ -34,7 +34,21 @@ export function buildAccountIndex(official, supplement) {
     supplementNames.add(s.name);
     addAlt(s.name, s.alternatives ?? []);
   }
-  return { names, official: officialNames, supplement: supplementNames, alternatives };
+  // 「普通預金○○銀行」「〇〇商店」のように、○○ に口座名・取引先名が入る科目
+  const esc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const patterns = [...officialNames]
+    .filter((n) => /[○〇]{2}/.test(n))
+    .map((n) => {
+      const [pre, post] = n.split(/[○〇]{2}/);
+      return { template: n, re: new RegExp(`^${esc(pre)}[^\\s]{1,12}${esc(post)}$`) };
+    });
+  return { names, official: officialNames, supplement: supplementNames, alternatives, patterns };
+}
+
+/** 公式表(または補助リスト)にある科目か。「普通預金A銀行」のような ○○ の形の科目も認める */
+export function isKnownAccount(index, name) {
+  if (index.names.has(name)) return true;
+  return index.patterns.some((p) => p.re.test(name) && !/[○〇]{2}/.test(name));
 }
 
 /** 解答の科目 user が、正解の科目 answer として認められるか(同じ名前か、正解の許容科目) */
@@ -272,7 +286,84 @@ export function gradeMulti(q, selected) {
   return { correct, mistake, selected: sel, issues: sel.length ? [] : ['選択肢を選んでください。'] };
 }
 
+// ---------- 表の穴埋め(出納帳・商品有高帳・精算表など) ----------
+// table: { title, columns: [{ label, align }], rows: [[セル, ...], ...] }
+// セル: 文字 | 数 | null(何も書かない欄)
+//      | { blank: true, kind: 'number', answer: 数 または null(空欄のままが正解) }
+//      | { blank: true, kind: 'select', options: [...], answer: 文字 }
+
+export const cellKey = (r, c) => `${r},${c}`;
+const isBlank = (cell) => !!cell && typeof cell === 'object' && cell.blank === true;
+
+/** 空欄の一覧 [{ r, c, cell }] */
+export function tableBlanks(table) {
+  const out = [];
+  table.rows.forEach((row, r) => row.forEach((cell, c) => isBlank(cell) && out.push({ r, c, cell })));
+  return out;
+}
+
+/** 正解を入れたときの、セルの数値(数でなければ 0) */
+export function tableValue(table, r, c) {
+  const cell = table.rows[r]?.[c];
+  if (typeof cell === 'number') return cell;
+  if (isBlank(cell) && cell.kind === 'number') return cell.answer ?? 0;
+  return 0;
+}
+
+/** 表の中の計算(合計・差額)が正しいか。check: { label, op, args: [数 または [行, 列]], result: [行, 列] } */
+export function verifyTableCheck(table, check, ops) {
+  const vals = check.args.map((a) => (Array.isArray(a) ? tableValue(table, a[0], a[1]) : a));
+  return ops[check.op].run(vals) === tableValue(table, check.result[0], check.result[1]);
+}
+
+/** 表の穴埋めの採点。input: { "行,列": 入力した文字 } */
+export function gradeTable(q, input) {
+  const cells = {};
+  let filled = 0;
+  for (const { r, c, cell } of tableBlanks(q.table)) {
+    const key = cellKey(r, c);
+    const raw = String(input?.[key] ?? '').trim();
+    if (raw) filled++;
+    let value;
+    let ok;
+    if (cell.kind === 'select') {
+      value = raw || null;
+      ok = value === cell.answer;
+    } else {
+      value = raw ? parseAmount(raw) : null;
+      ok = raw && value == null ? false : value === cell.answer;
+    }
+    cells[key] = { ok, value, answer: cell.answer };
+  }
+  const list = Object.values(cells);
+  const okCount = list.filter((x) => x.ok).length;
+  const correct = okCount === list.length && list.length > 0;
+  const hits = correct
+    ? []
+    : (q.mistakes ?? []).filter((m) => {
+        const x = m.cell && cells[cellKey(m.cell[0], m.cell[1])];
+        return x && !x.ok && x.value === m.value;
+      });
+  return {
+    correct,
+    cells,
+    okCount,
+    total: list.length,
+    mistake: hits[0] ?? null,
+    mistakes: hits,
+    issues: filled ? [] : ['表に記入してください。'],
+  };
+}
+
+/** テスト・表示用: 正解をすべて入れた入力 */
+export function tableAnswerInput(table) {
+  const out = {};
+  for (const { r, c, cell } of tableBlanks(table)) out[cellKey(r, c)] = cell.answer == null ? '' : String(cell.answer);
+  return out;
+}
+
 export function gradeQuestion(q, answer, index) {
+  if (q.type === 'table') return gradeTable(q, answer);
   if (q.type === 'journal') return gradeJournal(q, answer, index);
   if (q.type === 'choice') return gradeChoice(q, answer);
   if (q.type === 'numeric') return gradeNumeric(q, answer);

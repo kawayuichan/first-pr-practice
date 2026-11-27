@@ -110,12 +110,14 @@ function parseTable(lines, start, opts) {
             : head[0].startsWith('振替伝票')
               ? 'md-slip slip-transfer'
               : 'md-table';
+  // 列が多い表は、スマホで縦につぶれないよう折り返さずに横スクロールにする
+  const wide = head.length >= 5 ? ' md-wide' : '';
   const cell = (tag, text, k) =>
     `<${tag}${aligns[k] ? ` class="al-${aligns[k]}"` : ''}>${renderInline(text ?? '', opts)}</${tag}>`;
   const thead = `<tr>${head.map((h, k) => cell('th', h, k)).join('')}</tr>`;
   const tbody = rows.map((r) => `<tr>${head.map((_, k) => cell('td', r[k], k)).join('')}</tr>`).join('');
   return {
-    html: `<div class="table-wrap"><table class="${cls}"><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`,
+    html: `<div class="table-wrap"><table class="${cls}${wide}"><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`,
     next: i,
   };
 }

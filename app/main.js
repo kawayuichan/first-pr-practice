@@ -400,7 +400,60 @@ function slipsInline(slips) {
     .join('、');
 }
 
+function tableForm(q) {
+  const t = q.table;
+  const right = (c) => (t.columns[c].align === 'right' ? ' class="al-right"' : '');
+  const head = `<tr>${t.columns.map((col, c) => `<th${right(c)}>${esc(col.label)}</th>`).join('')}</tr>`;
+  const body = t.rows
+    .map(
+      (row, r) =>
+        `<tr>${row
+          .map((cell, c) => {
+            if (cell && typeof cell === 'object' && cell.blank) {
+              const key = `${r},${c}`;
+              const label = `${t.columns[c].label}(${r + 1}行目)`;
+              if (cell.kind === 'select') {
+                return `<td class="tb-blank"><select class="tcell" data-key="${key}" aria-label="${esc(label)}"><option value="">選ぶ</option>${cell.options
+                  .map((o) => `<option>${esc(o)}</option>`)
+                  .join('')}</select></td>`;
+              }
+              return `<td class="tb-blank"><input class="tcell amt" data-key="${key}" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="next" aria-label="${esc(label)}"></td>`;
+            }
+            const v = typeof cell === 'number' ? fmt(cell) : cell == null ? '' : renderInline(String(cell));
+            return `<td${right(c)}>${v}</td>`;
+          })
+          .join('')}</tr>`,
+    )
+    .join('');
+  return `${t.title ? `<div class="tb-title">${esc(t.title)}</div>` : ''}
+    <div class="table-wrap"><table class="md-table fill-table"><thead>${head}</thead><tbody>${body}</tbody></table></div>
+    <p class="muted small">空欄に記入します。何も書かない欄は、空けたままにします。表が横に長いときは、横にスクロールできます。</p>`;
+}
+
+function markTableCells(q, res) {
+  for (const el of $app.querySelectorAll('.tcell')) {
+    const x = res.cells[el.dataset.key];
+    if (!x) continue;
+    const td = el.closest('td');
+    td.classList.add(x.ok ? 'cell-ok' : 'cell-ng');
+    if (!x.ok) {
+      const ans = x.answer == null ? '(空欄)' : typeof x.answer === 'number' ? fmt(x.answer) : esc(x.answer);
+      td.insertAdjacentHTML('beforeend', `<div class="cell-ans">正: ${ans}</div>`);
+    }
+  }
+}
+
+function cellLabel(q, cell) {
+  const [r, c] = cell;
+  const name = (q.table.rows[r] ?? []).find((v) => typeof v === 'string' && v && !/^[\d/]+$/.test(v));
+  const rowName = name ?? `${r + 1}行目`;
+  return `${rowName}の「${q.table.columns[c].label}」`;
+}
+
 function collectAnswer(q) {
+  if (q.type === 'table') {
+    return Object.fromEntries([...$app.querySelectorAll('.tcell')].map((el) => [el.dataset.key, el.value]));
+  }
   if (q.type === 'slips') return collectSlips();
   if (q.type === 'multi') return [...$app.querySelectorAll('input[name="opt"]:checked')].map((el) => Number(el.value));
   if (q.type === 'journal') {
@@ -420,6 +473,7 @@ function collectAnswer(q) {
 }
 
 function isEmptyAnswer(q, a) {
+  if (q.type === 'table') return Object.values(a).every((v) => !String(v).trim());
   if (q.type === 'journal') return [...a.debit, ...a.credit].every((l) => !l.account && !String(l.amount).trim());
   if (q.type === 'slips') {
     const vals = a.flatMap((s) => (s.kind === 'transfer' ? [s.debit.account, s.debit.amount, s.credit.account, s.credit.amount] : [s.account, s.amount]));
@@ -435,7 +489,14 @@ function renderQuestion() {
   const q = S.questions.get(s.ids[s.i]);
   const t = S.topics.get(q.topic);
   const progress = Math.round((s.i / s.ids.length) * 100);
-  const forms = { journal: journalForm, choice: choiceForm, numeric: numericForm, slips: slipsForm, multi: multiForm };
+  const forms = {
+    journal: journalForm,
+    choice: choiceForm,
+    numeric: numericForm,
+    slips: slipsForm,
+    multi: multiForm,
+    table: tableForm,
+  };
   const form = forms[q.type](q);
   page({
     title: s.title,
@@ -487,7 +548,9 @@ async function submit(q) {
         ? '選択肢を選んでください。'
         : q.type === 'slips'
           ? '伝票を追加して記入してください。'
-          : '解答を入力してください。';
+          : q.type === 'table'
+            ? '表の空欄に記入してください。'
+            : '解答を入力してください。';
     return;
   }
   msg.textContent = '';
@@ -504,6 +567,7 @@ async function submit(q) {
       else if (k === answer) el.classList.add('is-wrong');
     });
   }
+  if (q.type === 'table') markTableCells(q, res);
   if (q.type === 'multi') {
     const sel = new Set(answer);
     const ans = new Set(q.answer);
@@ -538,8 +602,19 @@ async function resultHtml(q, res, answer) {
       : '<div class="verdict ng"><span>×</span>不正解</div>',
   );
   if (res.issues?.length) parts.push(`<ul class="issues">${res.issues.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`);
-  if (res.mistake) {
+  if (q.type === 'table' && res.mistakes?.length) {
+    parts.push(
+      `<div class="mistake-hit"><h3>よくある間違いです</h3><ul>${res.mistakes
+        .map((m) => `<li><strong>${esc(cellLabel(q, m.cell))}</strong>: ${renderInline(m.why)}</li>`)
+        .join('')}</ul></div>`,
+    );
+  } else if (res.mistake) {
     parts.push(`<div class="mistake-hit"><h3>よくある間違いです</h3><p>${renderInline(res.mistake.why)}</p></div>`);
+  }
+  if (q.type === 'table') {
+    parts.push(
+      `<p>${res.okCount} / ${res.total} 欄 正解。${res.correct ? '' : '表の赤い欄の下に正解を表示しています。'}</p>`,
+    );
   }
 
   if (q.type === 'journal') {
@@ -571,11 +646,14 @@ async function resultHtml(q, res, answer) {
   parts.push(`<div class="explain"><h3>解説</h3>${renderMarkdown(q.explanation).html}</div>`);
   if (q.calc?.length) parts.push(`<div class="calc"><h3>計算</h3><ul>${q.calc.map(stepHtml).join('')}</ul></div>`);
 
-  const others = (q.mistakes ?? []).filter((m) => m !== res.mistake);
+  const matched = new Set(res.mistakes ?? (res.mistake ? [res.mistake] : []));
+  const others = (q.mistakes ?? []).filter((m) => !matched.has(m));
   if (others.length) {
     const item = (m) => {
       const what =
-        m.entry !== undefined
+        m.cell !== undefined
+          ? `${esc(cellLabel(q, m.cell))}に「${m.value == null ? '(空欄)' : typeof m.value === 'number' ? fmt(m.value) : esc(m.value)}」`
+          : m.entry !== undefined
           ? entryInline(m.entry)
           : m.slips !== undefined
             ? slipsInline(m.slips)
