@@ -15,6 +15,7 @@ import {
   gradeTable,
   isKnownAccount,
   accountAccepted,
+  expandAccountName,
   slipsNet,
   verifyTableCheck,
 } from '../app/lib/grading.js';
@@ -237,6 +238,24 @@ describe('「ここを覚える」ボックス', () => {
   });
   test('ふつうの引用はそのまま', () => {
     assert.match(renderMarkdown('> 注意').html, /^<blockquote>/);
+  });
+});
+
+describe('公式表の半角かっこ付きの科目名', () => {
+  test('付けても付けなくてもよい・入れ替える・間に入れる、の形に広げる', () => {
+    assert.deepEqual(expandAccountName('(特別)修繕引当金').sort(), ['修繕引当金', '特別修繕引当金'].sort());
+    assert.deepEqual(expandAccountName('商品(製品)保証引当金').sort(), ['商品保証引当金', '製品保証引当金'].sort());
+    assert.deepEqual(expandAccountName('未払(役員)賞与').sort(), ['未払賞与', '未払役員賞与'].sort());
+    assert.deepEqual(expandAccountName('退職給付引当金繰入(額)').sort(), ['退職給付引当金繰入', '退職給付引当金繰入額'].sort());
+    assert.deepEqual(expandAccountName('現金'), ['現金']);
+  });
+  test('広げた名前を科目として認め、許容科目も引き継ぐ', () => {
+    for (const n of ['商品保証引当金', '製品保証引当金', '商品保証引当金繰入', '修繕引当金', '特別修繕引当金繰入', '賞与引当金', '役員賞与引当金繰入', '未払賞与', '受取社債利息', '修繕料']) {
+      assert.ok(isKnownAccount(accountIndex, n), n);
+    }
+    assert.ok(!isKnownAccount(accountIndex, '商品製品保証引当金'));
+    assert.ok(accountAccepted(accountIndex, '退職給付引当金繰入額', '退職給付費用'));
+    assert.ok(accountAccepted(accountIndex, '未払賞与金', '未払賞与'));
   });
 });
 
