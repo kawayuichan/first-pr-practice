@@ -7,6 +7,30 @@ import { parseAmount } from './format.js';
  * official: data/official/accounts_2027.json、supplement: data/accounts_supplement.json
  * 戻り値: { names: Set(使える科目名すべて), official: Set, supplement: Set, alternatives: Map(標準科目 → Set(許容科目)) }
  */
+/**
+ * 公式表の半角かっこ付きの科目名を、実際に使う名前に広げる。
+ * - 「(特別)修繕引当金」「退職給付引当金繰入(額)」: かっこの中は付けても付けなくてもよい
+ * - 「未払(役員)賞与」「受取(社債)利息」: 間に入れても入れなくてもよい
+ * - 「商品(製品)保証引当金」: 前の語(商品)を入れ替える(商品保証引当金・製品保証引当金)
+ * かっこがなければ、その名前だけを返す
+ */
+export function expandAccountName(name) {
+  const m = /^(.*?)\(([^()]+)\)(.*)$/.exec(name);
+  if (!m) return [name];
+  const [, before, inside, after] = m;
+  const outs = new Set();
+  for (const rest of expandAccountName(after)) {
+    outs.add(before + rest);
+    // 前の語と最後の字が同じ(商品・製品)なら入れ替え、そうでなければ間に入れる
+    if (before && before.slice(-1) === inside.slice(-1)) {
+      outs.add(before.slice(0, -inside.length) + inside + rest);
+    } else {
+      outs.add(before + inside + rest);
+    }
+  }
+  return [...outs];
+}
+
 export function buildAccountIndex(official, supplement) {
   const names = new Set();
   const officialNames = new Set();
@@ -26,6 +50,13 @@ export function buildAccountIndex(official, supplement) {
           officialNames.add(b);
         }
         addAlt(a, bs);
+        // 半角かっこ付きの名前は、実際に使う名前に広げて登録する
+        const bVariants = bs.flatMap(expandAccountName);
+        for (const n of [...expandAccountName(a), ...bVariants]) {
+          names.add(n);
+          officialNames.add(n);
+        }
+        for (const av of expandAccountName(a)) addAlt(av, bVariants);
       }
     }
   }

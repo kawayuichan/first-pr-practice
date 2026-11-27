@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "c4c183306baf",
+  "version": "f06b1ad74f27",
   "topics": [
     {
       "id": "B01",
@@ -150,9 +150,9 @@
       "id": "C03",
       "phase": 1,
       "name": "引当金",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C03.md",
+      "questions": "data/questions/C03.json",
+      "count": 12,
       "needs_review": 0
     },
     {
@@ -546,6 +546,7 @@
     "data/questions/B14.json",
     "data/questions/C01.json",
     "data/questions/C02.json",
+    "data/questions/C03.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -561,6 +562,7 @@
     "textbook/B13.md",
     "textbook/B14.md",
     "textbook/C01.md",
-    "textbook/C02.md"
+    "textbook/C02.md",
+    "textbook/C03.md"
   ]
 }
