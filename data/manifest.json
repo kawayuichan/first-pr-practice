@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "7042eb071ea2",
+  "version": "3eb05df8fa1a",
   "topics": [
     {
       "id": "B01",
@@ -312,9 +312,9 @@
       "id": "K01",
       "phase": 2,
       "name": "工業簿記の基礎",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/K01.md",
+      "questions": "data/questions/K01.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -564,6 +564,7 @@
     "data/questions/C18.json",
     "data/questions/C19.json",
     "data/questions/C20.json",
+    "data/questions/K01.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -597,6 +598,7 @@
     "textbook/C17.md",
     "textbook/C18.md",
     "textbook/C19.md",
-    "textbook/C20.md"
+    "textbook/C20.md",
+    "textbook/K01.md"
   ]
 }
