@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "0836a25078da",
+  "version": "c396501ff086",
   "topics": [
     {
       "id": "B01",
@@ -294,9 +294,9 @@
       "id": "C19",
       "phase": 1,
       "name": "純資産(2級)",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C19.md",
+      "questions": "data/questions/C19.json",
+      "count": 12,
       "needs_review": 0
     },
     {
@@ -562,6 +562,7 @@
     "data/questions/C16.json",
     "data/questions/C17.json",
     "data/questions/C18.json",
+    "data/questions/C19.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -593,6 +594,7 @@
     "textbook/C15.md",
     "textbook/C16.md",
     "textbook/C17.md",
-    "textbook/C18.md"
+    "textbook/C18.md",
+    "textbook/C19.md"
   ]
 }
