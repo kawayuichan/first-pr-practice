@@ -443,11 +443,22 @@ function markTableCells(q, res) {
   }
 }
 
+// 表の行の呼び名: 「15日 売上」のように日付と摘要で呼ぶ。摘要のない続きの行は「15日 売上(2行目)」
+function rowName(rows, r) {
+  const row = rows[r] ?? [];
+  const date = typeof row[0] === 'string' && /^\d+$/.test(row[0]) ? `${row[0]}日 ` : '';
+  const name = row.find((v) => typeof v === 'string' && v && !/^[\d/]+$/.test(v));
+  if (name) return `${date}${name}`;
+  for (let k = r - 1; k >= 0; k--) {
+    const above = rows[k].find((v) => typeof v === 'string' && v && !/^[\d/]+$/.test(v));
+    if (above) return `${rowName(rows, k)}(${r - k + 1}行目)`;
+  }
+  return `${r + 1}行目`;
+}
+
 function cellLabel(q, cell) {
   const [r, c] = cell;
-  const name = (q.table.rows[r] ?? []).find((v) => typeof v === 'string' && v && !/^[\d/]+$/.test(v));
-  const rowName = name ?? `${r + 1}行目`;
-  return `${rowName}の「${q.table.columns[c].label}」`;
+  return `${rowName(q.table.rows, r)}の「${q.table.columns[c].label}」`;
 }
 
 function collectAnswer(q) {
