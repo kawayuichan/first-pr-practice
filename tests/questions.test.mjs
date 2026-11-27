@@ -260,7 +260,9 @@ for (const { file, data } of files) {
             }
           });
 
-          test('表: 表の中の合計・差額が、計算し直しても一致する', () => {
+          test('表: 表の中の合計・差額が、計算し直しても一致する(数値の空欄がある表は検算が必須)', () => {
+            const hasNumberBlank = tableBlanks(q.table).some(({ cell }) => cell.kind === 'number');
+            if (hasNumberBlank) assert.ok(q.checks.length >= 1, '数値の空欄がある表には checks が必要');
             for (const ch of q.checks) assert.ok(verifyTableCheck(q.table, ch, OPS), `${ch.label} が合わない`);
           });
 

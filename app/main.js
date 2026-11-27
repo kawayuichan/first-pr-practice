@@ -458,7 +458,7 @@ function rowName(rows, r) {
 
 function cellLabel(q, cell) {
   const [r, c] = cell;
-  return `${rowName(q.table.rows, r)}の「${q.table.columns[c].label}」`;
+  return `「${rowName(q.table.rows, r)}」の「${q.table.columns[c].label}」`;
 }
 
 function collectAnswer(q) {

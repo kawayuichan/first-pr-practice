@@ -118,7 +118,9 @@ export const blankSelect = (options, answer) => ({ blank: true, kind: 'select', 
  */
 export function tableQ(o) {
   common(o);
-  if (!o.table || !o.checks?.length) throw new Error(`${o.id}: table と checks(表の中の計算)が必要です`);
+  if (!o.table) throw new Error(`${o.id}: table が必要です`);
+  const hasNumberBlank = o.table.rows.flat().some((c) => c && c.blank && c.kind === 'number');
+  if (hasNumberBlank && !o.checks?.length) throw new Error(`${o.id}: 数値の空欄がある表には checks(表の中の計算)が必要です`);
   return {
     id: o.id,
     topic: o.topic,
@@ -127,7 +129,7 @@ export function tableQ(o) {
     difficulty: o.difficulty,
     prompt: o.prompt,
     table: o.table,
-    checks: o.checks,
+    checks: o.checks ?? [],
     ...tail(o),
   };
 }
