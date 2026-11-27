@@ -14,6 +14,7 @@ import {
   gradeSlips,
   gradeTable,
   isKnownAccount,
+  accountAccepted,
   slipsNet,
   verifyTableCheck,
 } from '../app/lib/grading.js';
@@ -190,6 +191,23 @@ describe('口座名・取引先名が入る勘定科目', () => {
     assert.ok(isKnownAccount(accountIndex, '東西商店'));
     assert.ok(!isKnownAccount(accountIndex, 'A銀行'));
     assert.ok(!isKnownAccount(accountIndex, '受取手形'));
+  });
+});
+
+describe('経過勘定の科目(前払費用の各勘定など)', () => {
+  test('「前払○○・未払○○・未収○○・前受○○」を科目として認める', () => {
+    for (const n of ['前払保険料', '前払利息', '未払利息', '未払給料', '未収利息', '前受手数料', '前払リース料', '長期前払保険料']) {
+      assert.ok(isKnownAccount(accountIndex, n), n);
+    }
+    assert.ok(!isKnownAccount(accountIndex, '前払固定資産売却損'));
+    assert.ok(!isKnownAccount(accountIndex, '未収保険料'));
+  });
+  test('まとめた科目(前払費用など)も正解扱い', () => {
+    assert.ok(accountAccepted(accountIndex, '前払費用', '前払保険料'));
+    assert.ok(accountAccepted(accountIndex, '未払費用', '未払利息'));
+    assert.ok(accountAccepted(accountIndex, '未収収益', '未収利息'));
+    assert.ok(accountAccepted(accountIndex, '前受収益', '前受手数料'));
+    assert.ok(!accountAccepted(accountIndex, '未払費用', '前払保険料'));
   });
 });
 

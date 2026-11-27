@@ -34,6 +34,38 @@ export function buildAccountIndex(official, supplement) {
     supplementNames.add(s.name);
     addAlt(s.name, s.alternatives ?? []);
   }
+  // 経過勘定: 公式表では「前払保険料（前払費用の各勘定）」のように1行で書かれている。
+  // これは「前払保険料・前払利息…のように費用ごとに科目を作る(まとめて前払費用でもよい)」という意味なので、
+  // 費用・収益の科目から「前払○○・未払○○・未収○○・前受○○」を作り、前払費用などを許容科目にする
+  const expenses = new Set();
+  const revenues = new Set();
+  const families = [];
+  for (const grade of Object.values(official.grades)) {
+    for (const [a] of grade['費用'] ?? []) expenses.add(a);
+    for (const [a] of grade['収益'] ?? []) revenues.add(a);
+    for (const rows of Object.values(grade)) {
+      for (const [a] of rows) {
+        const m = a.match(/^(.+?)（(.+?)の各勘定）$/);
+        if (m) families.push({ example: m[1], group: m[2] });
+      }
+    }
+  }
+  const ACCRUAL_BASE = /(料|利息|家賃|地代|手数料|給料)$/;
+  for (const f of families) {
+    const isExpense = f.group.endsWith('費用');
+    const prefix = f.group.replace(/(費用|収益)$/, '');
+    const bases = new Set([f.example.slice(prefix.length)]);
+    for (const n of isExpense ? expenses : revenues) {
+      const b = n.replace(isExpense ? /^支払/ : /^受取/, '');
+      if (ACCRUAL_BASE.test(b) && !/[()（）]/.test(b)) bases.add(b);
+    }
+    for (const b of bases) {
+      const name = prefix + b;
+      names.add(name);
+      officialNames.add(name);
+      addAlt(name, [f.group]);
+    }
+  }
   // 「普通預金○○銀行」「〇〇商店」のように、○○ に口座名・取引先名が入る科目
   const esc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const patterns = [...officialNames]

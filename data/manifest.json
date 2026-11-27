@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "cb3f0e923727",
+  "version": "994cbf327ee8",
   "topics": [
     {
       "id": "B01",
@@ -87,9 +87,9 @@
       "id": "B10",
       "phase": 0,
       "name": "収益・費用と経過勘定",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/B10.md",
+      "questions": "data/questions/B10.json",
+      "count": 12,
       "needs_review": 0
     },
     {
@@ -539,6 +539,7 @@
     "data/questions/B07.json",
     "data/questions/B08.json",
     "data/questions/B09.json",
+    "data/questions/B10.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -547,6 +548,7 @@
     "textbook/B06.md",
     "textbook/B07.md",
     "textbook/B08.md",
-    "textbook/B09.md"
+    "textbook/B09.md",
+    "textbook/B10.md"
   ]
 }
