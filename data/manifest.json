@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "4d318f18c985",
+  "version": "5166a3d480ca",
   "topics": [
     {
       "id": "B01",
@@ -69,9 +69,9 @@
       "id": "B08",
       "phase": 0,
       "name": "貸倒れと貸倒引当金",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/B08.md",
+      "questions": "data/questions/B08.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -537,12 +537,14 @@
     "data/questions/B05.json",
     "data/questions/B06.json",
     "data/questions/B07.json",
+    "data/questions/B08.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
     "textbook/B04.md",
     "textbook/B05.md",
     "textbook/B06.md",
-    "textbook/B07.md"
+    "textbook/B07.md",
+    "textbook/B08.md"
   ]
 }
