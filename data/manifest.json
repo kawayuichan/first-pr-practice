@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "4ebc48991102",
+  "version": "765fee4cb6ee",
   "topics": [
     {
       "id": "B01",
@@ -42,9 +42,9 @@
       "id": "B05",
       "phase": 0,
       "name": "商品売買②売上原価対立法",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/B05.md",
+      "questions": "data/questions/B05.json",
+      "count": 8,
       "needs_review": 0
     },
     {
@@ -534,9 +534,11 @@
     "data/questions/B02.json",
     "data/questions/B03.json",
     "data/questions/B04.json",
+    "data/questions/B05.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
-    "textbook/B04.md"
+    "textbook/B04.md",
+    "textbook/B05.md"
   ]
 }
