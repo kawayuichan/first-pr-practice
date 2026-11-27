@@ -174,8 +174,7 @@
         "topic": "B09",
         "anchor": "improve"
       },
-      "needs_review": true,
-      "needs_review_reason": "区分表の有形固定資産(第二10)には資本的支出・収益的支出の明記がない。「ア 有形固定資産の取得」の一部として扱うことにした(scope.md 8章の6)。処理そのものは一般的な会計処理(改良は資産、修繕は費用)。"
+      "needs_review": false
     },
     {
       "id": "B09-003",

@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "75a6afa94fa5",
+  "version": "cb3f0e923727",
   "topics": [
     {
       "id": "B01",
@@ -81,7 +81,7 @@
       "textbook": "textbook/B09.md",
       "questions": "data/questions/B09.json",
       "count": 12,
-      "needs_review": 1
+      "needs_review": 0
     },
     {
       "id": "B10",
