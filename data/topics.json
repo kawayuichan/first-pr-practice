@@ -1,5 +1,5 @@
 {
-  "note": "論点IDの一覧。docs/scope.md の論点リストと同じIDでなければならない(テストで確認)。並び順 = 学習順(docs/study-plan.md)",
+  "note": "論点IDの一覧。docs/scope.md の論点リストと同じIDでなければならない(テストで確認)。並び順 = 学習順(docs/study-plan.md)。noJournal: true は、仕訳を使わない論点(直接原価計算・CVP分析)で、参考書に仕訳の表がなくてもよい",
   "phases": [
     { "id": 0, "name": "Phase 0 3級の土台" },
     { "id": 1, "name": "Phase 1 2級商業簿記の個別論点" },
@@ -51,8 +51,8 @@
     { "id": "K08", "phase": 2, "name": "総合原価計算①" },
     { "id": "K09", "phase": 2, "name": "総合原価計算②" },
     { "id": "K10", "phase": 2, "name": "標準原価計算" },
-    { "id": "K11", "phase": 2, "name": "直接原価計算" },
-    { "id": "K12", "phase": 2, "name": "CVP分析" },
+    { "id": "K11", "phase": 2, "name": "直接原価計算", "noJournal": true },
+    { "id": "K12", "phase": 2, "name": "CVP分析", "noJournal": true },
     { "id": "K13", "phase": 2, "name": "製品の受払い・本社工場会計" },
     { "id": "C21", "phase": 3, "name": "決算整理と精算表(2級)" },
     { "id": "C22", "phase": 3, "name": "財務諸表の作成" },

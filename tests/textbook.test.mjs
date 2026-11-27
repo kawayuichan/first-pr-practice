@@ -71,7 +71,8 @@ for (const file of sources) {
     test('仕訳の表は貸借が一致する', () => {
       const out = renderTemplate(src);
       const tables = journalTables(out);
-      assert.ok(tables.length > 0, '仕訳パターンの表がない');
+      // 直接原価計算・CVP分析のように仕訳を使わない論点(topics.json の noJournal)は、表がなくてもよい
+      if (!topics.find((t) => t.id === id).noJournal) assert.ok(tables.length > 0, '仕訳パターンの表がない');
       for (const t of tables) {
         let dr = 0;
         let cr = 0;
