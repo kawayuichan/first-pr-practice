@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "6ec155193e8d",
+  "version": "c3821a1a6737",
   "topics": [
     {
       "id": "B01",
@@ -276,9 +276,9 @@
       "id": "C17",
       "phase": 1,
       "name": "税金(2級)",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C17.md",
+      "questions": "data/questions/C17.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -560,6 +560,7 @@
     "data/questions/C14.json",
     "data/questions/C15.json",
     "data/questions/C16.json",
+    "data/questions/C17.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -589,6 +590,7 @@
     "textbook/C13.md",
     "textbook/C14.md",
     "textbook/C15.md",
-    "textbook/C16.md"
+    "textbook/C16.md",
+    "textbook/C17.md"
   ]
 }
