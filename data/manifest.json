@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "67ac94a606d6",
+  "version": "9d559bf66052",
   "topics": [
     {
       "id": "B01",
@@ -105,9 +105,9 @@
       "id": "B12",
       "phase": 0,
       "name": "株式会社の資本",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/B12.md",
+      "questions": "data/questions/B12.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -541,6 +541,7 @@
     "data/questions/B09.json",
     "data/questions/B10.json",
     "data/questions/B11.json",
+    "data/questions/B12.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -551,6 +552,7 @@
     "textbook/B08.md",
     "textbook/B09.md",
     "textbook/B10.md",
-    "textbook/B11.md"
+    "textbook/B11.md",
+    "textbook/B12.md"
   ]
 }
