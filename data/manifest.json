@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "56f635ece1d0",
+  "version": "463129a3207b",
   "topics": [
     {
       "id": "B01",
@@ -213,9 +213,9 @@
       "id": "C10",
       "phase": 1,
       "name": "有形固定資産②取得",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C10.md",
+      "questions": "data/questions/C10.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -553,6 +553,7 @@
     "data/questions/C07.json",
     "data/questions/C08.json",
     "data/questions/C09.json",
+    "data/questions/C10.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -575,6 +576,7 @@
     "textbook/C06.md",
     "textbook/C07.md",
     "textbook/C08.md",
-    "textbook/C09.md"
+    "textbook/C09.md",
+    "textbook/C10.md"
   ]
 }
