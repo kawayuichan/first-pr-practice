@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "041a4dfc9365",
+  "version": "aa377c10b72c",
   "topics": [
     {
       "id": "B01",
@@ -411,9 +411,9 @@
       "id": "K12",
       "phase": 2,
       "name": "CVP分析",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/K12.md",
+      "questions": "data/questions/K12.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -575,6 +575,7 @@
     "data/questions/K09.json",
     "data/questions/K10.json",
     "data/questions/K11.json",
+    "data/questions/K12.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -619,6 +620,7 @@
     "textbook/K08.md",
     "textbook/K09.md",
     "textbook/K10.md",
-    "textbook/K11.md"
+    "textbook/K11.md",
+    "textbook/K12.md"
   ]
 }
