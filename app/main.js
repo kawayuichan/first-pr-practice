@@ -403,7 +403,27 @@ function slipsInline(slips) {
 function tableForm(q) {
   const t = q.table;
   const right = (c) => (t.columns[c].align === 'right' ? ' class="al-right"' : '');
-  const head = `<tr>${t.columns.map((col, c) => `<th${right(c)}>${esc(col.label)}</th>`).join('')}</tr>`;
+  // 列に group(例: 試算表)があれば、2段の見出しにする(精算表など)
+  let head;
+  if (t.columns.some((col) => col.group)) {
+    const top = [];
+    const sub = [];
+    for (let c = 0; c < t.columns.length; c++) {
+      const col = t.columns[c];
+      if (!col.group) {
+        top.push(`<th rowspan="2"${right(c)}>${esc(col.label)}</th>`);
+        continue;
+      }
+      let span = 1;
+      while (c + span < t.columns.length && t.columns[c + span].group === col.group) span++;
+      top.push(`<th colspan="${span}" class="al-center th-group">${esc(col.group)}</th>`);
+      for (let k = c; k < c + span; k++) sub.push(`<th${right(k)}>${esc(t.columns[k].label)}</th>`);
+      c += span - 1;
+    }
+    head = `<tr>${top.join('')}</tr><tr>${sub.join('')}</tr>`;
+  } else {
+    head = `<tr>${t.columns.map((col, c) => `<th${right(c)}>${esc(col.label)}</th>`).join('')}</tr>`;
+  }
   const body = t.rows
     .map(
       (row, r) =>
@@ -411,7 +431,7 @@ function tableForm(q) {
           .map((cell, c) => {
             if (cell && typeof cell === 'object' && cell.blank) {
               const key = `${r},${c}`;
-              const label = `${t.columns[c].label}(${r + 1}行目)`;
+              const label = `${colName(t.columns[c])}(${r + 1}行目)`;
               if (cell.kind === 'select') {
                 return `<td class="tb-blank"><select class="tcell" data-key="${key}" aria-label="${esc(label)}"><option value="">選ぶ</option>${cell.options
                   .map((o) => `<option>${esc(o)}</option>`)
@@ -456,9 +476,14 @@ function rowName(rows, r) {
   return `${r + 1}行目`;
 }
 
+// 列の呼び名。2段の見出しの列は「修正記入の借方」のように呼ぶ
+function colName(col) {
+  return col.group ? `${col.group}の${col.label}` : col.label;
+}
+
 function cellLabel(q, cell) {
   const [r, c] = cell;
-  return `「${rowName(q.table.rows, r)}」の「${q.table.columns[c].label}」`;
+  return `「${rowName(q.table.rows, r)}」の「${colName(q.table.columns[c])}」`;
 }
 
 function collectAnswer(q) {

@@ -355,9 +355,16 @@ table.md-wide thead th:first-child, table.fill-table thead th:first-child {
   background: var(--surface-2); z-index: 2;
   box-shadow: inset -1px 0 0 var(--line), -3px 0 0 var(--surface-2), 2px 0 4px rgba(20, 30, 50, 0.08);
 }
+/* 2段の見出し(精算表など): 2段目の左端は固定しない。上の段のまとめ見出しは中央に */
+table.md-wide thead tr + tr th:first-child, table.fill-table thead tr + tr th:first-child {
+  position: static; box-shadow: none; z-index: auto;
+}
+th.th-group { text-align: center; }
 table.fill-table td.cell-ok:first-child { background: var(--ok-bg); }
 table.fill-table td.cell-ng:first-child { background: var(--ng-bg); }
 
+/* 横に長い参考書の表(精算表など)も、左端の列は折り返して、固定した列が画面を取りすぎないようにする */
+table.md-wide td:first-child { white-space: normal; min-width: 6.5em; max-width: 9em; }
 /* 穴埋めの表: 左端の行の名前は折り返して幅を取りすぎないように。科目を選ぶ欄は文字が切れない幅に */
 table.fill-table td:first-child { white-space: normal; min-width: 7.5em; max-width: 9.5em; }
 table.fill-table td.tb-blank select { min-width: 8.5em; }

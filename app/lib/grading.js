@@ -344,7 +344,12 @@ export function tableValue(table, r, c) {
 
 /** 表の中の計算(合計・差額)が正しいか。check: { label, op, args: [数 または [行, 列]], result: [行, 列] } */
 export function verifyTableCheck(table, check, ops) {
-  const vals = check.args.map((a) => (Array.isArray(a) ? tableValue(table, a[0], a[1]) : a));
+  // args の要素: 数、[行, 列](その欄の金額)、['-', 行, 列](その欄の金額を引く。精算表の「試算表 + 修正 − 修正」など)
+  const vals = check.args.map((a) => {
+    if (!Array.isArray(a)) return a;
+    if (a[0] === '-') return -(tableValue(table, a[1], a[2]) ?? 0);
+    return tableValue(table, a[0], a[1]) ?? 0;
+  });
   return ops[check.op].run(vals) === tableValue(table, check.result[0], check.result[1]);
 }
 

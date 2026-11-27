@@ -112,9 +112,30 @@ function parseTable(lines, start, opts) {
               : 'md-table';
   // 列が多い表は、スマホで縦につぶれないよう折り返さずに横スクロールにする
   const wide = head.length >= 5 ? ' md-wide' : '';
-  const cell = (tag, text, k) =>
-    `<${tag}${aligns[k] ? ` class="al-${aligns[k]}"` : ''}>${renderInline(text ?? '', opts)}</${tag}>`;
-  const thead = `<tr>${head.map((h, k) => cell('th', h, k)).join('')}</tr>`;
+  const cell = (tag, text, k, extra = '') =>
+    `<${tag}${extra}${aligns[k] ? ` class="al-${aligns[k]}"` : ''}>${renderInline(text ?? '', opts)}</${tag}>`;
+  // 見出しに「試算表：借方」のように全角コロンがあれば、2段の見出しにする(上の段に「試算表」をまとめる)
+  let thead;
+  if (head.some((h) => h.includes('：'))) {
+    const parts = head.map((h) => (h.includes('：') ? h.split('：') : [null, h]));
+    const top = [];
+    const sub = [];
+    for (let k = 0; k < head.length; k++) {
+      const [group, label] = parts[k];
+      if (group === null) {
+        top.push(cell('th', label, k, ' rowspan="2"'));
+        continue;
+      }
+      let span = 1;
+      while (k + span < head.length && parts[k + span][0] === group) span++;
+      top.push(`<th colspan="${span}" class="al-center th-group">${renderInline(group, opts)}</th>`);
+      for (let j = k; j < k + span; j++) sub.push(cell('th', parts[j][1], j));
+      k += span - 1;
+    }
+    thead = `<tr>${top.join('')}</tr><tr>${sub.join('')}</tr>`;
+  } else {
+    thead = `<tr>${head.map((h, k) => cell('th', h, k)).join('')}</tr>`;
+  }
   const tbody = rows.map((r) => `<tr>${head.map((_, k) => cell('td', r[k], k)).join('')}</tr>`).join('');
   return {
     html: `<div class="table-wrap"><table class="${cls}${wide}"><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`,

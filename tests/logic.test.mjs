@@ -182,6 +182,11 @@ describe('表の穴埋めの採点', () => {
     assert.ok(verifyTableCheck(q.table, ok, OPS));
     assert.ok(!verifyTableCheck(q.table, { ...ok, args: [[0, 1]] }, OPS));
   });
+  test("['-', 行, 列] でその欄を引ける(a + b − c)", () => {
+    const t = { rows: [[10, 5, 3, 12]] };
+    assert.ok(verifyTableCheck(t, { label: 'x', op: 'add', args: [[0, 0], [0, 1], ['-', 0, 2]], result: [0, 3] }, OPS));
+    assert.ok(!verifyTableCheck(t, { label: 'x', op: 'add', args: [[0, 0], [0, 1], [0, 2]], result: [0, 3] }, OPS));
+  });
 });
 
 describe('口座名・取引先名が入る勘定科目', () => {
@@ -208,6 +213,18 @@ describe('経過勘定の科目(前払費用の各勘定など)', () => {
     assert.ok(accountAccepted(accountIndex, '未収収益', '未収利息'));
     assert.ok(accountAccepted(accountIndex, '前受収益', '前受手数料'));
     assert.ok(!accountAccepted(accountIndex, '未払費用', '前払保険料'));
+  });
+});
+
+describe('2段の見出しの表(精算表など)', () => {
+  test('「試算表：借方」の形の見出しを2段にまとめる', () => {
+    const md = '| 勘定科目 | 試算表：借方 | 試算表：貸方 | 修正記入：借方 |\n|---|--:|--:|--:|\n| 現金 | 100 | | |';
+    const { html } = renderMarkdown(md);
+    assert.match(html, /<th rowspan="2">勘定科目<\/th>/);
+    assert.match(html, /<th colspan="2" class="al-center th-group">試算表<\/th>/);
+    assert.match(html, /<th colspan="1" class="al-center th-group">修正記入<\/th>/);
+    assert.equal((html.match(/<tr>/g) ?? []).length, 3);
+    assert.ok(!html.includes('：'));
   });
 });
 
