@@ -410,7 +410,9 @@ function tableForm(q) {
       const key = `${r},${c}`;
       const label = `${colName(t.columns[c])}(${r + 1}行目)`;
       if (cell.kind === 'select') {
-        return `<td class="tb-blank"><select class="tcell" data-key="${key}" aria-label="${esc(label)}"><option value="">選ぶ</option>${cell.options
+        // 選択肢がすべて短い(番号など)ときは、欄を狭くして金額の欄が切れないようにする
+        const short = cell.options.every((o) => String(o).length <= 4);
+        return `<td class="tb-blank${short ? ' tb-short' : ''}"><select class="tcell" data-key="${key}" aria-label="${esc(label)}"><option value="">選ぶ</option>${cell.options
           .map((o) => `<option>${esc(o)}</option>`)
           .join('')}</select></td>`;
       }

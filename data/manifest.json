@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "092d6c98855e",
+  "version": "a0e8ff2f5d6f",
   "topics": [
     {
       "id": "B01",
@@ -168,9 +168,9 @@
       "id": "C05",
       "phase": 1,
       "name": "銀行勘定調整表",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C05.md",
+      "questions": "data/questions/C05.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -548,6 +548,7 @@
     "data/questions/C02.json",
     "data/questions/C03.json",
     "data/questions/C04.json",
+    "data/questions/C05.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -565,6 +566,7 @@
     "textbook/C01.md",
     "textbook/C02.md",
     "textbook/C03.md",
-    "textbook/C04.md"
+    "textbook/C04.md",
+    "textbook/C05.md"
   ]
 }
