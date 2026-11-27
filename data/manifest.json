@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "765fee4cb6ee",
+  "version": "5150f813191f",
   "topics": [
     {
       "id": "B01",
@@ -51,9 +51,9 @@
       "id": "B06",
       "phase": 0,
       "name": "売掛金・買掛金・電子記録債権",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/B06.md",
+      "questions": "data/questions/B06.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -535,10 +535,12 @@
     "data/questions/B03.json",
     "data/questions/B04.json",
     "data/questions/B05.json",
+    "data/questions/B06.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
     "textbook/B04.md",
-    "textbook/B05.md"
+    "textbook/B05.md",
+    "textbook/B06.md"
   ]
 }
