@@ -407,6 +407,12 @@ function tableForm(q) {
   const right = (c) => (t.columns[c].align === 'right' ? ' class="al-right"' : '');
   const title = t.title ? `<div class="tb-title">${esc(t.title)}</div>` : '';
   const note = '<p class="muted small">空欄に記入します。何も書かない欄は、空けたままにします。表が横に長いときは、横にスクロールできます。</p>';
+  // 100万円以上の金額がある表は、金額の欄を広げて「1,500,000」が切れないようにする(表ごとに決めるので、欄ごとの答えの桁はわからない)
+  const big = t.rows.flat().some((cell) => {
+    const v = cell && typeof cell === 'object' ? (cell.kind === 'number' ? cell.answer : null) : cell;
+    return typeof v === 'number' && Math.abs(v) >= 1000000;
+  });
+  const tableCls = `md-table fill-table${big ? ' tb-big' : ''}`;
   const cellHtml = (cell, r, c) => {
     if (cell && typeof cell === 'object' && cell.blank) {
       const key = `${r},${c}`;
@@ -440,7 +446,7 @@ function tableForm(q) {
           return `<tr>${cells.map((cell, k) => cellHtml(cell, r, offset + k)).join('')}</tr>`;
         })
         .join('');
-      return `<div class="table-wrap"><table class="md-table fill-table side-table"><thead><tr>${headRow}</tr></thead><tbody>${rows}</tbody></table></div>`;
+      return `<div class="table-wrap"><table class="${tableCls} side-table"><thead><tr>${headRow}</tr></thead><tbody>${rows}</tbody></table></div>`;
     };
     return `${title}<div class="sides">${side(0)}${side(half)}</div>${note}`;
   }
@@ -468,7 +474,7 @@ function tableForm(q) {
   }
   const body = t.rows.map((row, r) => `<tr>${row.map((cell, c) => cellHtml(cell, r, c)).join('')}</tr>`).join('');
   return `${title}
-    <div class="table-wrap"><table class="md-table fill-table"><thead>${head}</thead><tbody>${body}</tbody></table></div>
+    <div class="table-wrap"><table class="${tableCls}"><thead>${head}</thead><tbody>${body}</tbody></table></div>
     ${note}`;
 }
 
