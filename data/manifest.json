@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "a0e8ff2f5d6f",
+  "version": "c6e4d7015c5b",
   "topics": [
     {
       "id": "B01",
@@ -177,9 +177,9 @@
       "id": "C06",
       "phase": 1,
       "name": "電子記録債権(2級)",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C06.md",
+      "questions": "data/questions/C06.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -549,6 +549,7 @@
     "data/questions/C03.json",
     "data/questions/C04.json",
     "data/questions/C05.json",
+    "data/questions/C06.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -567,6 +568,7 @@
     "textbook/C02.md",
     "textbook/C03.md",
     "textbook/C04.md",
-    "textbook/C05.md"
+    "textbook/C05.md",
+    "textbook/C06.md"
   ]
 }
