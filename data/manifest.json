@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "b26a6be2fd4c",
+  "version": "85162356b6ae",
   "topics": [
     {
       "id": "B01",
@@ -447,9 +447,9 @@
       "id": "C23",
       "phase": 3,
       "name": "株主資本等変動計算書",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C23.md",
+      "questions": "data/questions/C23.json",
+      "count": 8,
       "needs_review": 0
     },
     {
@@ -566,6 +566,7 @@
     "data/questions/C20.json",
     "data/questions/C21.json",
     "data/questions/C22.json",
+    "data/questions/C23.json",
     "data/questions/K01.json",
     "data/questions/K02.json",
     "data/questions/K03.json",
@@ -615,6 +616,7 @@
     "textbook/C20.md",
     "textbook/C21.md",
     "textbook/C22.md",
+    "textbook/C23.md",
     "textbook/K01.md",
     "textbook/K02.md",
     "textbook/K03.md",

@@ -392,6 +392,8 @@ table.fill-table td.tb-blank select { min-width: 8.5em; }
 /* 番号など短い選択肢だけの欄は狭く */
 table.fill-table td.tb-blank.tb-short { min-width: 0; }
 table.fill-table td.tb-blank.tb-short select { min-width: 4.8em; }
+/* 100万円以上の金額がある表: 金額の入力欄を「9,999,999」が入る幅にする */
+table.fill-table.tb-big td.tb-blank { min-width: 7.6em; }
 
 /* 大事なところ: 参考書と解説の太字に蛍光ペン(下半分に黄色のマーカー) */
 .textbook strong, .explain strong {
