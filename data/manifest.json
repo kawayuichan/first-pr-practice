@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "a7a90aa500bd",
+  "version": "1c42b0fa6c94",
   "topics": [
     {
       "id": "B01",
@@ -366,9 +366,9 @@
       "id": "K07",
       "phase": 2,
       "name": "個別原価計算",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/K07.md",
+      "questions": "data/questions/K07.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -570,6 +570,7 @@
     "data/questions/K04.json",
     "data/questions/K05.json",
     "data/questions/K06.json",
+    "data/questions/K07.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -609,6 +610,7 @@
     "textbook/K03.md",
     "textbook/K04.md",
     "textbook/K05.md",
-    "textbook/K06.md"
+    "textbook/K06.md",
+    "textbook/K07.md"
   ]
 }
