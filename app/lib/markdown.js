@@ -212,6 +212,12 @@ export function renderMarkdown(md, opts = {}) {
     if (/^>/.test(line)) {
       const buf = [];
       while (i < lines.length && /^>/.test(lines[i])) buf.push(lines[i++].replace(/^>\s?/, ''));
+      // 「> [!覚える]」で始まる引用は「ここを覚える」ボックスにする
+      if (/^\[!覚える\]\s*$/.test(buf[0] ?? '')) {
+        const inner = renderMarkdown(buf.slice(1).join('\n'), opts).html;
+        html.push(`<aside class="memo"><div class="memo-title">📌 ここを覚える</div>${inner}</aside>`);
+        continue;
+      }
       html.push(`<blockquote>${renderMarkdown(buf.join('\n'), opts).html}</blockquote>`);
       continue;
     }
