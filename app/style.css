@@ -253,6 +253,8 @@ table.md-taccount thead th { border-bottom: 2px solid var(--text); }
 .side.debit legend { color: var(--primary); }
 .side.credit legend { color: var(--ok); }
 .jrow { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 8px; margin-bottom: 8px; }
+/* 長い科目名を選んだ行: スマホでは科目と金額を上下に並べ、科目名が切れないようにする */
+@media (max-width: 600px) { .jrow.long { grid-template-columns: minmax(0, 1fr); } }
 select, input[type='text'] {
   width: 100%; min-height: 46px; padding: 8px 10px; font: inherit; font-size: 16px;
   color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 8px;

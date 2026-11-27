@@ -17,6 +17,8 @@ import {
 
 const $app = document.getElementById('app');
 const MAX_ROWS = 6;
+/** これより長い科目名は、スマホの選択欄で途中が切れるので、行を上下2段にする */
+const LONG_ACCOUNT = 7;
 const MAX_SLIPS = 4;
 
 const S = {
@@ -585,6 +587,14 @@ function renderQuestion() {
       if (n >= MAX_ROWS) return;
       rows.insertAdjacentHTML('beforeend', rowHtml(b.dataset.side, n, q.choices));
       if (n + 1 >= MAX_ROWS) b.disabled = true;
+    }),
+  );
+  // 長い科目名を選んだ行は、スマホでは科目と金額を上下に並べる(科目名が途中で切れて、似た名前と見分けられなくなるのを防ぐ)
+  $app.querySelectorAll('.rows').forEach((rows) =>
+    rows.addEventListener('change', (ev) => {
+      const sel = ev.target;
+      if (!(sel instanceof HTMLSelectElement) || !sel.classList.contains('acc')) return;
+      sel.closest('.jrow')?.classList.toggle('long', sel.value.length > LONG_ACCOUNT);
     }),
   );
   if (q.type === 'slips') wireSlips(q);
