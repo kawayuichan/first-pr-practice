@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "463129a3207b",
+  "version": "cc6f83ed4c88",
   "topics": [
     {
       "id": "B01",
@@ -222,9 +222,9 @@
       "id": "C11",
       "phase": 1,
       "name": "有形固定資産③償却・未決算",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C11.md",
+      "questions": "data/questions/C11.json",
+      "count": 12,
       "needs_review": 0
     },
     {
@@ -554,6 +554,7 @@
     "data/questions/C08.json",
     "data/questions/C09.json",
     "data/questions/C10.json",
+    "data/questions/C11.json",
     "textbook/B01.md",
     "textbook/B02.md",
     "textbook/B03.md",
@@ -577,6 +578,7 @@
     "textbook/C07.md",
     "textbook/C08.md",
     "textbook/C09.md",
-    "textbook/C10.md"
+    "textbook/C10.md",
+    "textbook/C11.md"
   ]
 }
