@@ -1,6 +1,6 @@
 {
   "note": "自動生成ファイル(scripts/build.mjs)。アプリの目次とオフライン用キャッシュの一覧",
-  "version": "8a86afef00ff",
+  "version": "b26a6be2fd4c",
   "topics": [
     {
       "id": "B01",
@@ -438,9 +438,9 @@
       "id": "C22",
       "phase": 3,
       "name": "財務諸表の作成",
-      "textbook": null,
-      "questions": null,
-      "count": 0,
+      "textbook": "textbook/C22.md",
+      "questions": "data/questions/C22.json",
+      "count": 10,
       "needs_review": 0
     },
     {
@@ -565,6 +565,7 @@
     "data/questions/C19.json",
     "data/questions/C20.json",
     "data/questions/C21.json",
+    "data/questions/C22.json",
     "data/questions/K01.json",
     "data/questions/K02.json",
     "data/questions/K03.json",
@@ -613,6 +614,7 @@
     "textbook/C19.md",
     "textbook/C20.md",
     "textbook/C21.md",
+    "textbook/C22.md",
     "textbook/K01.md",
     "textbook/K02.md",
     "textbook/K03.md",
